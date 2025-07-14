@@ -1,4 +1,5 @@
 import { WorkoutSession, SessionStep, HangboardSet } from '../types';
+import { workoutStorage } from './storage';
 
 // Mobility routine - 15 minutes, 1 minute each exercise
 export const mobilitySteps: SessionStep[] = [
@@ -224,7 +225,7 @@ export const hangboardSteps: SessionStep[] = [
   }
 ];
 
-export const workoutSessions: Record<string, WorkoutSession> = {
+const defaultWorkoutSessions: Record<string, WorkoutSession> = {
   mobility: {
     type: 'mobility',
     steps: mobilitySteps,
@@ -235,4 +236,29 @@ export const workoutSessions: Record<string, WorkoutSession> = {
     steps: hangboardSteps,
     totalDuration: hangboardSteps.reduce((sum, step) => sum + step.duration, 0)
   }
+};
+
+export const workoutSessions: Record<string, WorkoutSession> = new Proxy(defaultWorkoutSessions, {
+  get(target, prop) {
+    if (typeof prop === 'string') {
+      // First check custom workouts
+      const customWorkouts = workoutStorage.getCustomWorkouts();
+      if (customWorkouts[prop]) {
+        return customWorkouts[prop];
+      }
+      // Then check default workouts
+      return target[prop];
+    }
+    return target[prop];
+  },
+  
+  ownKeys(target) {
+    const customWorkouts = workoutStorage.getCustomWorkouts();
+    return [...Object.keys(target), ...Object.keys(customWorkouts)];
+  }
+});
+
+export const getAllWorkouts = (): Record<string, WorkoutSession> => {
+  const customWorkouts = workoutStorage.getCustomWorkouts();
+  return { ...defaultWorkoutSessions, ...customWorkouts };
 };

@@ -88,3 +88,11 @@ Preferred communication style: Simple, everyday language.
 **Express Backend**: Minimal server setup allows for future API expansion while maintaining simple development workflow.
 
 **Component Library**: Radix UI provides accessible, unstyled components that work well with TailwindCSS customization approach.
+
+## Recent Changes: Latest modifications with dates
+
+- **January 14, 2025**: Fixed timer functionality - Timer now properly syncs with external play/pause controls
+- **January 14, 2025**: Improved styling - Changed background to light gray, enhanced color contrast for better readability
+- **January 14, 2025**: Added workout editing functionality - Users can now edit existing workouts and create new custom routines
+- **January 14, 2025**: Implemented persistent custom workout storage using localStorage
+- **January 14, 2025**: Enhanced Home page to display all available workouts (default + custom) with edit buttons

@@ -260,8 +260,10 @@ export default function Session() {
           <Timer
             duration={currentStep?.duration || 0}
             onComplete={handleTimerComplete}
-            isRunning={isRunning && !isPaused}
+            isRunning={isRunning}
+            isPaused={isPaused}
             color={getSessionColor()}
+            onReset={currentStepIndex !== undefined}
           />
         </div>
 

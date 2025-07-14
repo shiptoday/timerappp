@@ -1,6 +1,7 @@
-import { LogEntry } from '../types';
+import { LogEntry, WorkoutSession } from '../types';
 
 const STORAGE_KEY = 'flowtrainer_workout_logs';
+const CUSTOM_WORKOUTS_KEY = 'flowtrainer_custom_workouts';
 
 export const workoutStorage = {
   getLogs(): LogEntry[] {
@@ -71,5 +72,35 @@ export const workoutStorage = {
     }
 
     return result;
+  },
+
+  getCustomWorkouts(): Record<string, WorkoutSession> {
+    try {
+      const stored = localStorage.getItem(CUSTOM_WORKOUTS_KEY);
+      return stored ? JSON.parse(stored) : {};
+    } catch (error) {
+      console.error('Error loading custom workouts:', error);
+      return {};
+    }
+  },
+
+  saveCustomWorkouts(workouts: Record<string, WorkoutSession>): void {
+    try {
+      localStorage.setItem(CUSTOM_WORKOUTS_KEY, JSON.stringify(workouts));
+    } catch (error) {
+      console.error('Error saving custom workouts:', error);
+      throw new Error('Failed to save custom workouts');
+    }
+  },
+
+  deleteCustomWorkout(workoutId: string): void {
+    try {
+      const workouts = this.getCustomWorkouts();
+      delete workouts[workoutId];
+      this.saveCustomWorkouts(workouts);
+    } catch (error) {
+      console.error('Error deleting custom workout:', error);
+      throw new Error('Failed to delete custom workout');
+    }
   }
 };

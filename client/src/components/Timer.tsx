@@ -1,26 +1,52 @@
 import { useTimer } from '../hooks/useTimer';
 import { cn } from '../lib/utils';
+import { useEffect } from 'react';
 
 interface TimerProps {
   duration: number;
   onComplete?: () => void;
   isRunning?: boolean;
+  isPaused?: boolean;
   className?: string;
   color?: string;
+  onReset?: boolean;
 }
 
 export function Timer({ 
   duration, 
   onComplete, 
-  isRunning = false, 
+  isRunning = false,
+  isPaused = false,
   className,
-  color = '#10B981'
+  color = '#10B981',
+  onReset = false
 }: TimerProps) {
   const timer = useTimer({ 
     initialTime: duration, 
     onComplete, 
-    autoStart: isRunning 
+    autoStart: false 
   });
+
+  // Sync external controls with timer
+  useEffect(() => {
+    if (isRunning && !isPaused) {
+      timer.start();
+    } else if (isPaused) {
+      timer.pause();
+    }
+  }, [isRunning, isPaused]);
+
+  // Reset timer when duration changes
+  useEffect(() => {
+    timer.reset(duration);
+  }, [duration]);
+
+  // Handle external reset
+  useEffect(() => {
+    if (onReset) {
+      timer.reset(duration);
+    }
+  }, [onReset, duration]);
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -60,11 +86,11 @@ export function Timer({
         
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
-            <div className="text-4xl font-bold text-neutral mb-1">
+            <div className="text-4xl font-bold text-gray-800 mb-1">
               {formatTime(timer.currentTime)}
             </div>
-            <div className="text-sm text-gray-500">
-              {timer.isComplete ? 'complete' : timer.isPaused ? 'paused' : 'remaining'}
+            <div className="text-sm text-gray-600">
+              {timer.isComplete ? 'complete' : isPaused ? 'paused' : 'remaining'}
             </div>
           </div>
         </div>
