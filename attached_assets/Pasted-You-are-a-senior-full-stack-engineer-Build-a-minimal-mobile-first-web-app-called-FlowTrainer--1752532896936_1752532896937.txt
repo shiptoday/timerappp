@@ -1,0 +1,67 @@
+You are a senior full‑stack engineer.  
+Build a **minimal, mobile‑first web app called “FlowTrainer”** that:
+
+────────────────────────────────────────
+1. FEATURES
+────────────────────────────────────────
+● **Session runner** – two buttons on the home screen: “Mobility” and “Hangboard”.  
+    – When a button is pressed, load the pre‑defined routine (see §3) and enter a **follow‑along view** that shows:  
+        • current exercise name, thumbnail image, remaining time (count‑down).  
+        • controls: Start ▸  Pause / Resume  ◄Back | ►Next | Finish.  
+    – Auto‑advance when the timer hits 0; play a short beep/vibration.
+
+● **Workout log** – after Finish, write a record to persistent storage with:  
+    `date, sessionType, completedExercises[], totalTime`.  
+    – Show logs in reverse‑chronological order; allow delete.  
+    – Optional chart summarising weekly volume.
+
+● **State persistence** – everything works offline. Use `localStorage` for data; no backend.
+
+────────────────────────────────────────
+2. TECH STACK
+────────────────────────────────────────
+* **React + Vite + TypeScript** (default Replit template).  
+* **TailwindCSS** for styling; no external UI library.  
+* **React‑Router** with just two routes: `/` (Home & Log) and `/session/:type`.  
+* Sounds via Web Audio API; vibration via `navigator.vibrate`.
+
+────────────────────────────────────────
+3. HARD‑CODED ROUTINES
+────────────────────────────────────────
+### Mobility (15 min)  → 1 min each, in order  
+1. Banded shoulder dislocates  
+2. Downward Dog  
+3. Cat‑Cow  
+4. Wrist pulses (front/back)  
+5. Quadruped Hip CARs  
+6. Hip thrust + Arch  
+7. Seated wide‑leg forward fold  
+8. Plow pose  
+9. Garland squat  
+10. Pigeon + Frog (30 s each)  
+11. Active bar hang (60 s)
+
+### Hangboard (15 min) — use **20 mm edge, 50 % BW**  
+Warm‑up (2 min jug hangs + finger flicks) → then for each grip **[half‑crimp, open‑3‑finger, pockets]** run:  
+*loop 3×* → 10 s hang : 50 s rest  
+3 min rest between grips
+
+────────────────────────────────────────
+4. COMPONENT BREAKDOWN
+────────────────────────────────────────
+`App.tsx` – routes  
+`Home.tsx` – buttons + Log list  
+`Session.tsx` – runner logic  
+`Timer.tsx` – reusable countdown hook + controls  
+`data.ts` – JSON arrays for routines  
+`assets/` – small PNGs or SVG icons for each exercise (placeholder OK)
+
+────────────────────────────────────────
+5. QUALITY BAR
+────────────────────────────────────────
+● ≤500 kB initial bundle; lighthouse ≥90 mobile.  
+● Clear, typed interfaces (`SessionStep`, `LogEntry`).  
+● 100 % keyboard operable + ARIA labels.  
+● Unit test `Timer` with vitest.
+
+Deliver runnable code with `npm run dev` working on Replit.  
