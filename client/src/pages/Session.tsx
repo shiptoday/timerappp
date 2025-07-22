@@ -75,8 +75,7 @@ export default function Session() {
     setCurrentStepIndex(prev => prev + 1);
     setIsRunning(true);
     setIsPaused(false);
-    // Play transition beep when starting next exercise
-    audioManager.playTimerComplete();
+    // No sound here - transition sound only plays when exercise completes
   };
 
   const skipToNext = () => {
@@ -173,10 +172,12 @@ export default function Session() {
     return '#000000';
   };
 
-  const addFifteenSeconds = () => {
+  const addExtraTime = () => {
+    const seconds = sessionType === 'hangboard' ? 10 : 15;
     if ((window as any).timerAddTime) {
-      (window as any).timerAddTime(15);
+      (window as any).timerAddTime(seconds);
     }
+    audioManager.playButtonPress();
   };
 
   if (!session) {
@@ -259,21 +260,7 @@ export default function Session() {
           )}
         </h2>
 
-        {/* Exercise Position Image - Made Bigger */}
-        <div className="mb-6 h-48 flex items-center justify-center flex-shrink-0">
-          {currentStep && getExerciseImage(currentStep.name, currentStep.imageKey) ? (
-            <img 
-              src={getExerciseImage(currentStep.name, currentStep.imageKey)} 
-              alt={currentStep.name}
-              className="max-h-full max-w-full object-contain rounded-lg shadow-sm"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-          ) : (
-            <div className="text-gray-300 dark:text-gray-600 text-xs">No image available</div>
-          )}
-        </div>
+
 
         {/* Timer Display - Now Much Larger */}
         <div className="flex-1 flex items-center justify-center relative min-h-[320px]">
@@ -285,17 +272,17 @@ export default function Session() {
             isPaused={isPaused}
             color={isTransitionPhase ? "#10B981" : getSessionColor()}
             onReset={false}
-            onAddTime={!isTransitionPhase ? addFifteenSeconds : undefined}
+            onAddTime={!isTransitionPhase ? addExtraTime : undefined}
           />
           {/* +15sec Button - Now positioned better for larger timer */}
-          {isRunning && (
+          {isRunning && !isTransitionPhase && (
             <Button
-              onClick={addFifteenSeconds}
+              onClick={addExtraTime}
               className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-full shadow-lg min-h-[44px] min-w-[44px] font-medium"
               size="sm"
-              aria-label="Add 15 seconds"
+              aria-label={`Add ${sessionType === 'hangboard' ? '10' : '15'} seconds`}
             >
-              +15s
+              +{sessionType === 'hangboard' ? '10' : '15'}s
             </Button>
           )}
         </div>
