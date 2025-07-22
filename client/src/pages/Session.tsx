@@ -225,14 +225,15 @@ export default function Session() {
             <img 
               src={getExerciseImage(currentStep.name)} 
               alt={currentStep.name}
-              className="max-h-full max-w-full object-contain rounded-lg shadow-sm"
+              className="max-h-full max-w-full object-contain rounded shadow-sm"
+              onLoad={() => console.log(`Loaded image for: ${currentStep.name}`)}
               onError={(e) => {
-                // Hide image if it fails to load
+                console.log(`Failed to load image for: ${currentStep.name}`);
                 e.currentTarget.style.display = 'none';
               }}
             />
           ) : (
-            <div className="text-gray-300 text-xs">Exercise position image</div>
+            <div className="text-gray-300 text-xs">No image available</div>
           )}
         </div>
 

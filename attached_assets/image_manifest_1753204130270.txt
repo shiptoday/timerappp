@@ -1,0 +1,14 @@
+Image Manifest for Stretching Exercises:
+
+banded_shoulder_dislocates.jpg: Banded shoulder dislocates
+adho_mukha_svanasana_dog.jpg: Adho mukha svanasana (Dog)
+cat_cow.jpg: Cat-Cow
+wrist_pulses_front_back_on_floor.jpg: Wrist pulses (front/back on floor)
+quadruped_hip_cars.jpg: Quadruped Hip CAR's
+hip_thrust_arch.jpg: Hip thrust + Arch
+upavistha_konasana_forward_seated_fold_open_legs.png: Upavistha konasana (Forward seated fold open legs)
+halasana_knees_to_floor.png: Halasana (Knees to floor)
+garland_squat.jpg: Garland squat
+pigeon_pose_frog.jpg: Pigeon pose + Frog
+active_bar_hang.jpg: Active bar hang
+
