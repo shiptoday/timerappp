@@ -32,7 +32,6 @@ export function useTimer({ initialTime, onComplete, autoStart = false }: UseTime
           const newTime = prevState.currentTime - 1;
           
           if (newTime <= 0) {
-            audioManager.playTimerComplete();
             onCompleteRef.current?.();
             return {
               ...prevState,

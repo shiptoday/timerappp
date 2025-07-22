@@ -71,12 +71,15 @@ export default function Session() {
 
   const handleTransitionComplete = () => {
     // Move to next exercise and auto-start
-    setCurrentStepIndex(prev => prev + 1);
     setIsTransitionPhase(false);
-    setIsRunning(true);
-    setIsPaused(false);
-    // Play transition beep when starting next exercise
-    audioManager.playTimerComplete();
+    setCurrentStepIndex(prev => prev + 1);
+    // Small delay to ensure state updates properly
+    setTimeout(() => {
+      setIsRunning(true);
+      setIsPaused(false);
+      // Play transition beep when starting next exercise
+      audioManager.playTimerComplete();
+    }, 100);
   };
 
   const skipToNext = () => {
@@ -270,27 +273,16 @@ export default function Session() {
 
         {/* Timer Display - Now Much Larger */}
         <div className="flex-1 flex items-center justify-center relative min-h-[320px]">
-          {isTransitionPhase ? (
-            <Timer
-              key={`transition-${currentStepIndex}`}
-              duration={10}
-              isRunning={isRunning}
-              isPaused={isPaused}
-              onComplete={handleTransitionComplete}
-              color="#10B981"
-            />
-          ) : (
-            <Timer
-              key={`${currentStepIndex}-${currentStep?.duration}`}
-              duration={currentStep?.duration || 0}
-              onComplete={handleTimerComplete}
-              isRunning={isRunning}
-              isPaused={isPaused}
-              color={getSessionColor()}
-              onReset={currentStepIndex !== undefined}
-              onAddTime={addFifteenSeconds}
-            />
-          )}
+          <Timer
+            key={isTransitionPhase ? `transition-${currentStepIndex}` : `exercise-${currentStepIndex}-${currentStep?.duration}`}
+            duration={isTransitionPhase ? 10 : (currentStep?.duration || 0)}
+            onComplete={isTransitionPhase ? handleTransitionComplete : handleTimerComplete}
+            isRunning={isRunning}
+            isPaused={isPaused}
+            color={isTransitionPhase ? "#10B981" : getSessionColor()}
+            onReset={false}
+            onAddTime={!isTransitionPhase ? addFifteenSeconds : undefined}
+          />
           {/* +15sec Button - Now positioned better for larger timer */}
           {isRunning && (
             <Button
