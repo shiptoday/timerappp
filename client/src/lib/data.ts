@@ -86,15 +86,15 @@ export const mobilitySteps: SessionStep[] = [
 export const hangboardSteps: SessionStep[] = [
   // Warmup
   {
-    id: 'warmup-jug-hangs',
-    name: 'Jug Hangs',
-    duration: 60,
-    instructions: 'Hang from large holds to warm up shoulders and fingers.',
+    id: 'warmup-easy-jug-hangs',
+    name: 'Warm‑up – Easy Jug Hangs',
+    duration: 30,
+    instructions: 'Total time: ≈ 15 min • Load: 20 mm edge @ 50% BW • Focus on relaxed shoulders & smooth breathing.',
     type: 'warmup'
   },
   {
     id: 'warmup-finger-flicks',
-    name: 'Finger Flicks',
+    name: 'Warm‑up – Finger Flicks + Rest',
     duration: 60,
     instructions: 'Gentle finger flexion and extension to warm up tendons.',
     type: 'warmup'
@@ -102,7 +102,7 @@ export const hangboardSteps: SessionStep[] = [
   // Half-crimp sets (3 sets of 10s hang : 50s rest)
   {
     id: 'half-crimp-1',
-    name: 'Half-Crimp Set 1',
+    name: 'Half‑Crimp Hang #1',
     duration: 10,
     instructions: '20mm edge, 50% BW. Half-crimp grip position.',
     type: 'exercise'
@@ -116,7 +116,7 @@ export const hangboardSteps: SessionStep[] = [
   },
   {
     id: 'half-crimp-2',
-    name: 'Half-Crimp Set 2',
+    name: 'Half‑Crimp Hang #2',
     duration: 10,
     instructions: '20mm edge, 50% BW. Half-crimp grip position.',
     type: 'exercise'
@@ -130,7 +130,7 @@ export const hangboardSteps: SessionStep[] = [
   },
   {
     id: 'half-crimp-3',
-    name: 'Half-Crimp Set 3',
+    name: 'Half‑Crimp Hang #3',
     duration: 10,
     instructions: '20mm edge, 50% BW. Half-crimp grip position.',
     type: 'exercise'
@@ -138,7 +138,7 @@ export const hangboardSteps: SessionStep[] = [
   // 3 minute rest between grips
   {
     id: 'grip-rest-1',
-    name: 'Grip Change Rest',
+    name: 'Rest Between Grips',
     duration: 180,
     instructions: 'Rest between grip types. Shake out hands.',
     type: 'rest'
@@ -146,7 +146,7 @@ export const hangboardSteps: SessionStep[] = [
   // Open 3-finger sets
   {
     id: 'open-3-finger-1',
-    name: 'Open 3-Finger Set 1',
+    name: '3‑Finger Open Hang #1',
     duration: 10,
     instructions: '20mm edge, 50% BW. Open 3-finger grip.',
     type: 'exercise'
@@ -160,7 +160,7 @@ export const hangboardSteps: SessionStep[] = [
   },
   {
     id: 'open-3-finger-2',
-    name: 'Open 3-Finger Set 2',
+    name: '3‑Finger Open Hang #2',
     duration: 10,
     instructions: '20mm edge, 50% BW. Open 3-finger grip.',
     type: 'exercise'
@@ -174,7 +174,7 @@ export const hangboardSteps: SessionStep[] = [
   },
   {
     id: 'open-3-finger-3',
-    name: 'Open 3-Finger Set 3',
+    name: '3‑Finger Open Hang #3',
     duration: 10,
     instructions: '20mm edge, 50% BW. Open 3-finger grip.',
     type: 'exercise'
@@ -182,7 +182,7 @@ export const hangboardSteps: SessionStep[] = [
   // 3 minute rest between grips
   {
     id: 'grip-rest-2',
-    name: 'Grip Change Rest',
+    name: 'Rest Between Grips',
     duration: 180,
     instructions: 'Rest between grip types. Shake out hands.',
     type: 'rest'
@@ -190,7 +190,7 @@ export const hangboardSteps: SessionStep[] = [
   // Pockets sets
   {
     id: 'pockets-1',
-    name: 'Pockets Set 1',
+    name: 'Pocket Hang #1',
     duration: 10,
     instructions: '20mm edge, 50% BW. Pocket grip position.',
     type: 'exercise'
@@ -204,7 +204,7 @@ export const hangboardSteps: SessionStep[] = [
   },
   {
     id: 'pockets-2',
-    name: 'Pockets Set 2',
+    name: 'Pocket Hang #2',
     duration: 10,
     instructions: '20mm edge, 50% BW. Pocket grip position.',
     type: 'exercise'
@@ -218,7 +218,7 @@ export const hangboardSteps: SessionStep[] = [
   },
   {
     id: 'pockets-3',
-    name: 'Pockets Set 3',
+    name: 'Pocket Hang #3',
     duration: 10,
     instructions: '20mm edge, 50% BW. Pocket grip position.',
     type: 'exercise'

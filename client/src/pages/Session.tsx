@@ -279,7 +279,7 @@ export default function Session() {
         <div className="flex-1 flex items-center justify-center relative min-h-[320px]">
           <Timer
             key={isTransitionPhase ? `transition-${currentStepIndex}` : `exercise-${currentStepIndex}-${currentStep?.duration}`}
-            duration={isTransitionPhase ? 10 : (currentStep?.duration || 0)}
+            duration={isTransitionPhase ? 3 : (currentStep?.duration || 0)}
             onComplete={isTransitionPhase ? handleTransitionComplete : handleTimerComplete}
             isRunning={isRunning}
             isPaused={isPaused}
