@@ -25,6 +25,9 @@ export default function Session() {
   const [isSessionComplete, setIsSessionComplete] = useState(false);
   const [isSessionCancelled, setIsSessionCancelled] = useState(false);
   const [totalElapsedTime, setTotalElapsedTime] = useState(0);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [isTransitionPhase, setIsTransitionPhase] = useState(false);
+  const [lastTapTime, setLastTapTime] = useState(0);
 
   const currentStep = session?.steps[currentStepIndex];
 
@@ -53,17 +56,49 @@ export default function Session() {
     if (currentStep) {
       setCompletedSteps(prev => [...prev, currentStep.id]);
     }
-    nextStep();
+    
+    if (currentStepIndex < (session?.steps.length || 0) - 1) {
+      // Start 10-second transition phase
+      setIsTransitionPhase(true);
+      setIsRunning(false);
+      audioManager.playTimerComplete();
+      
+      // After 10 seconds, move to next exercise and auto-start
+      setTimeout(() => {
+        setCurrentStepIndex(currentStepIndex + 1);
+        setIsTransitionPhase(false);
+        setIsRunning(true);
+        setIsPaused(false);
+        // Play transition beep when starting next exercise
+        audioManager.playTimerComplete();
+      }, 10000);
+    } else {
+      // Session complete
+      finishSession();
+    }
   };
 
-  const nextStep = () => {
-    if (!session) return;
+  const skipToNext = () => {
+    if (currentStep) {
+      setCompletedSteps(prev => [...prev, currentStep.id]);
+    }
     
-    if (currentStepIndex < session.steps.length - 1) {
-      setCurrentStepIndex(prev => prev + 1);
+    if (currentStepIndex < (session?.steps.length || 0) - 1) {
+      setCurrentStepIndex(currentStepIndex + 1);
+      setIsRunning(true);
+      setIsPaused(false);
+      audioManager.playTimerComplete();
     } else {
       finishSession();
     }
+  };
+
+  const handleExerciseNameTap = () => {
+    const now = Date.now();
+    if (now - lastTapTime < 300) { // Double tap within 300ms
+      skipToNext();
+    }
+    setLastTapTime(now);
   };
 
   const previousStep = () => {
@@ -76,6 +111,8 @@ export default function Session() {
     if (!isRunning) {
       setIsRunning(true);
       setIsPaused(false);
+      // Play beep when starting exercise
+      audioManager.playTimerComplete();
     } else {
       setIsPaused(!isPaused);
     }
@@ -83,6 +120,7 @@ export default function Session() {
 
   const finishSession = (cancelled = false) => {
     setIsRunning(false);
+    setShowCancelDialog(false);
     
     if (cancelled) {
       setIsSessionCancelled(true);
@@ -100,6 +138,11 @@ export default function Session() {
       workoutStorage.addLog(logEntry);
       audioManager.playSessionComplete();
     }
+  };
+
+  const handleEndSessionClick = () => {
+    audioManager.playButtonPress();
+    setShowCancelDialog(true);
   };
 
   const formatTime = (seconds: number): string => {
@@ -195,8 +238,16 @@ export default function Session() {
       {/* Current Exercise Display */}
       <main className="px-4 py-6 text-center relative min-h-[calc(100vh-220px)] flex flex-col">
         {/* Exercise Name */}
-        <h2 className="text-2xl sm:text-3xl font-light text-gray-900 dark:text-gray-100 mb-6 px-2">
-          {currentStep?.name}
+        <h2 
+          className="text-2xl sm:text-3xl font-light text-gray-900 dark:text-gray-100 mb-6 px-2 cursor-pointer select-none"
+          onClick={handleExerciseNameTap}
+        >
+          {isTransitionPhase ? 'Rest & Prepare' : currentStep?.name}
+          {!isTransitionPhase && (
+            <span className="block text-xs text-gray-400 dark:text-gray-500 mt-2">
+              Double tap to skip →
+            </span>
+          )}
         </h2>
 
         {/* Exercise Position Image */}
@@ -217,15 +268,27 @@ export default function Session() {
 
         {/* Timer Display - Now Much Larger */}
         <div className="flex-1 flex items-center justify-center relative min-h-[320px]">
-          <Timer
-            duration={currentStep?.duration || 0}
-            onComplete={handleTimerComplete}
-            isRunning={isRunning}
-            isPaused={isPaused}
-            color={getSessionColor()}
-            onReset={currentStepIndex !== undefined}
-            onAddTime={addFifteenSeconds}
-          />
+          {isTransitionPhase ? (
+            <Timer
+              key="transition-timer"
+              duration={10}
+              isRunning={true}
+              isPaused={false}
+              onComplete={() => {}} // Handled by setTimeout
+              color="#10B981"
+            />
+          ) : (
+            <Timer
+              key={`${currentStepIndex}-${currentStep?.duration}`}
+              duration={currentStep?.duration || 0}
+              onComplete={handleTimerComplete}
+              isRunning={isRunning}
+              isPaused={isPaused}
+              color={getSessionColor()}
+              onReset={currentStepIndex !== undefined}
+              onAddTime={addFifteenSeconds}
+            />
+          )}
           {/* +15sec Button - Now positioned better for larger timer */}
           {isRunning && (
             <Button
@@ -284,10 +347,7 @@ export default function Session() {
             {/* Small End Session Button */}
             {(isRunning || isPaused) && (
               <Button 
-                onClick={() => {
-                  audioManager.playButtonPress();
-                  finishSession(true);
-                }}
+                onClick={handleEndSessionClick}
                 variant="outline"
                 className="w-12 h-12 rounded-lg border-2 border-red-200 dark:border-red-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 p-0"
                 aria-label="End session"
@@ -298,6 +358,35 @@ export default function Session() {
           </div>
         </div>
       </div>
+
+      {/* Cancel Confirmation Dialog */}
+      {showCancelDialog && (
+        <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center p-6 z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full mx-4 text-center">
+            <h3 className="text-xl font-medium text-gray-900 dark:text-gray-100 mb-4">
+              End Workout?
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm">
+              Your progress won't be saved if you end early.
+            </p>
+            <div className="flex gap-3">
+              <Button 
+                onClick={() => setShowCancelDialog(false)}
+                variant="outline"
+                className="flex-1 rounded-xl"
+              >
+                Keep Going
+              </Button>
+              <Button 
+                onClick={() => finishSession(true)}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white rounded-xl"
+              >
+                End Workout
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
