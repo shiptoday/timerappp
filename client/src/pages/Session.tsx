@@ -116,6 +116,13 @@ export default function Session() {
       // Play beep when starting exercise
       audioManager.playTimerComplete();
     } else {
+      if (isPaused) {
+        // Resuming - play next/resume sound
+        audioManager.playNext();
+      } else {
+        // Pausing - play pause sound
+        audioManager.playPause();
+      }
       setIsPaused(!isPaused);
     }
   };
