@@ -110,3 +110,7 @@ Preferred communication style: Simple, everyday language.
 - **January 22, 2025**: Removed session header completely - eliminated progress bar, session title, and navigation buttons for ultra-minimal focus on exercise content only
 - **January 22, 2025**: Redesigned controls - single large button (green to start/resume, red to stop), removed previous/next buttons, added +15sec button on timer during exercise
 - **January 22, 2025**: Redesigned home page - big square blue workout buttons, small edit icons on workout buttons, orange create new workout button at bottom, removed header
+- **January 22, 2025**: iPhone 16 optimizations - Enhanced mobile viewport settings, added safe area support for notch devices, implemented PWA meta tags for iOS, added -webkit optimizations for smoother performance
+- **January 22, 2025**: Redesigned timer for iPhone - Increased timer size from 192px to 320px (67% larger), improved typography with 6xl text size, added gradient shadows and better contrast for high-DPI displays
+- **January 22, 2025**: Enhanced mobile touch targets - All buttons now meet 44px minimum touch target requirement, improved tap areas, added active scale animations for better haptic feedback
+- **January 22, 2025**: Improved mobile layout - Added flexbox layouts for better space utilization, relocated "next exercise" preview to be less intrusive, enhanced bottom navigation with backdrop blur and safe area padding

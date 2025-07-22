@@ -178,32 +178,32 @@ export default function Session() {
   }
 
   return (
-    <div className="max-w-md mx-auto bg-white min-h-screen">
+    <div className="max-w-md mx-auto bg-white dark:bg-gray-900 min-h-screen safe-area-top safe-area-bottom">
       {/* Current Exercise Display */}
-      <main className="p-6 text-center relative min-h-[calc(100vh-140px)]">
+      <main className="px-4 py-6 text-center relative min-h-[calc(100vh-180px)] flex flex-col">
         {/* Exercise Name */}
-        <h2 className="text-3xl font-light text-gray-900 mb-12">
+        <h2 className="text-2xl sm:text-3xl font-light text-gray-900 dark:text-gray-100 mb-6 px-2">
           {currentStep?.name}
         </h2>
 
         {/* Exercise Position Image */}
-        <div className="mb-12 h-40 flex items-center justify-center">
+        <div className="mb-6 h-32 flex items-center justify-center flex-shrink-0">
           {currentStep && getExerciseImage(currentStep.name, currentStep.imageKey) ? (
             <img 
               src={getExerciseImage(currentStep.name, currentStep.imageKey)} 
               alt={currentStep.name}
-              className="max-h-full max-w-full object-contain rounded shadow-sm"
+              className="max-h-full max-w-full object-contain rounded-lg shadow-sm"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
               }}
             />
           ) : (
-            <div className="text-gray-300 text-xs">No image available</div>
+            <div className="text-gray-300 dark:text-gray-600 text-xs">No image available</div>
           )}
         </div>
 
-        {/* Timer Display */}
-        <div className="mb-8 relative">
+        {/* Timer Display - Now Much Larger */}
+        <div className="flex-1 flex items-center justify-center relative min-h-[320px]">
           <Timer
             duration={currentStep?.duration || 0}
             onComplete={handleTimerComplete}
@@ -212,11 +212,11 @@ export default function Session() {
             color={getSessionColor()}
             onReset={currentStepIndex !== undefined}
           />
-          {/* +15sec Button */}
+          {/* +15sec Button - Now positioned better for larger timer */}
           {isRunning && (
             <Button
               onClick={addFifteenSeconds}
-              className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded-full"
+              className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-full shadow-lg min-h-[44px] min-w-[44px] font-medium"
               size="sm"
               aria-label="Add 15 seconds"
             >
@@ -225,27 +225,27 @@ export default function Session() {
           )}
         </div>
 
-        {/* Next Exercise Preview - Bottom Right Corner */}
+        {/* Next Exercise Preview - Repositioned for better mobile layout */}
         {getNextStep() && (
-          <div className="absolute bottom-8 right-6 bg-gray-50 px-3 py-2 rounded shadow-sm border max-w-32">
-            <p className="text-xs text-gray-400 uppercase tracking-wide">Next</p>
-            <p className="text-sm text-gray-600 font-light truncate">{getNextStep()?.name}</p>
+          <div className="mt-4 bg-gray-50 dark:bg-gray-800 px-4 py-3 rounded-lg shadow-sm border dark:border-gray-700 mx-4">
+            <p className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">Next Exercise</p>
+            <p className="text-sm text-gray-600 dark:text-gray-300 font-medium">{getNextStep()?.name}</p>
           </div>
         )}
       </main>
 
       {/* Session Controls */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-6">
+      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 p-4 safe-area-bottom">
         <div className="max-w-md mx-auto">
-          {/* Main Action Button */}
+          {/* Main Action Button - Enhanced for iPhone */}
           <Button 
             onClick={isRunning ? finishSession : toggleTimer}
-            className={`w-full py-6 text-xl font-medium rounded-lg transition-colors ${
+            className={`w-full py-4 text-lg font-semibold rounded-xl transition-all duration-200 min-h-[56px] shadow-lg ${
               isRunning 
-                ? 'bg-red-500 hover:bg-red-600 text-white' 
+                ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white shadow-red-500/20' 
                 : isPaused
-                ? 'bg-green-500 hover:bg-green-600 text-white'
-                : 'bg-green-500 hover:bg-green-600 text-white'
+                ? 'bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-green-500/20'
+                : 'bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-green-500/20'
             }`}
             aria-label={isRunning ? "Stop session" : isPaused ? "Resume timer" : "Start timer"}
           >
@@ -253,12 +253,12 @@ export default function Session() {
               <>Stop Session</>
             ) : isPaused ? (
               <>
-                <Play className="w-6 h-6 mr-3" />
+                <Play className="w-5 h-5 mr-2" />
                 Resume
               </>
             ) : (
               <>
-                <Play className="w-6 h-6 mr-3" />
+                <Play className="w-5 h-5 mr-2" />
                 Start
               </>
             )}
