@@ -116,8 +116,8 @@ export default function Session() {
       audioManager.playTimerComplete();
     } else {
       if (isPaused) {
-        // Resuming - play next/resume sound
-        audioManager.playNext();
+        // Resuming - play button press sound, not transition sound
+        audioManager.playButtonPress();
       } else {
         // Pausing - play pause sound
         audioManager.playPause();
