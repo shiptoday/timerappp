@@ -8,7 +8,7 @@ import { getExerciseImage } from '../lib/exerciseImages';
 import { workoutStorage } from '../lib/storage';
 import { audioManager } from '../lib/audio';
 import { SessionStep, LogEntry } from '../types';
-import { Play, Pause, SkipBack, SkipForward, Home, RotateCcw } from 'lucide-react';
+import { Play, Home, RotateCcw } from 'lucide-react';
 
 export default function Session() {
   const params = useParams<{ type: string }>();
@@ -116,6 +116,11 @@ export default function Session() {
     return '#000000';
   };
 
+  const addFifteenSeconds = () => {
+    // This would need to communicate with the Timer component
+    // For now, just a placeholder function
+  };
+
   if (!session) {
     return <div>Loading...</div>;
   }
@@ -198,7 +203,7 @@ export default function Session() {
         </div>
 
         {/* Timer Display */}
-        <div className="mb-8">
+        <div className="mb-8 relative">
           <Timer
             duration={currentStep?.duration || 0}
             onComplete={handleTimerComplete}
@@ -207,6 +212,17 @@ export default function Session() {
             color={getSessionColor()}
             onReset={currentStepIndex !== undefined}
           />
+          {/* +15sec Button */}
+          {isRunning && (
+            <Button
+              onClick={addFifteenSeconds}
+              className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded-full"
+              size="sm"
+              aria-label="Add 15 seconds"
+            >
+              +15s
+            </Button>
+          )}
         </div>
 
         {/* Next Exercise Preview - Bottom Right Corner */}
@@ -221,57 +237,31 @@ export default function Session() {
       {/* Session Controls */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-6">
         <div className="max-w-md mx-auto">
-          <div className="flex items-center space-x-4 mb-4">
-            
-            {/* Previous Button */}
-            <Button 
-              variant="outline"
-              onClick={previousStep}
-              disabled={currentStepIndex === 0}
-              className="flex-1 rounded-none py-4 border-gray-200 text-gray-600 font-light"
-              aria-label="Previous exercise"
-            >
-              <SkipBack className="w-4 h-4 mr-2" />
-              Previous
-            </Button>
-
-            {/* Play/Pause Button */}
-            <Button 
-              onClick={toggleTimer}
-              className="flex-2 bg-black hover:bg-gray-800 text-white rounded-none py-4 font-light transition-colors"
-              aria-label={isPaused ? "Resume timer" : isRunning ? "Pause timer" : "Start timer"}
-            >
-              {isPaused ? (
-                <Play className="w-4 h-4 mr-2" />
-              ) : isRunning ? (
-                <Pause className="w-4 h-4 mr-2" />
-              ) : (
-                <Play className="w-4 h-4 mr-2" />
-              )}
-              {isPaused ? 'Resume' : isRunning ? 'Pause' : 'Start'}
-            </Button>
-
-            {/* Next Button */}
-            <Button 
-              variant="outline"
-              onClick={nextStep}
-              disabled={currentStepIndex === session.steps.length - 1}
-              className="flex-1 rounded-none py-4 border-gray-200 text-gray-600 font-light"
-              aria-label="Next exercise"
-            >
-              Next
-              <SkipForward className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
-
-          {/* Emergency Stop */}
+          {/* Main Action Button */}
           <Button 
-            variant="ghost"
-            onClick={finishSession}
-            className="w-full text-gray-400 hover:text-gray-600 text-sm font-light py-2"
-            aria-label="Finish session early"
+            onClick={isRunning ? finishSession : toggleTimer}
+            className={`w-full py-6 text-xl font-medium rounded-lg transition-colors ${
+              isRunning 
+                ? 'bg-red-500 hover:bg-red-600 text-white' 
+                : isPaused
+                ? 'bg-green-500 hover:bg-green-600 text-white'
+                : 'bg-green-500 hover:bg-green-600 text-white'
+            }`}
+            aria-label={isRunning ? "Stop session" : isPaused ? "Resume timer" : "Start timer"}
           >
-            End Session
+            {isRunning ? (
+              <>Stop Session</>
+            ) : isPaused ? (
+              <>
+                <Play className="w-6 h-6 mr-3" />
+                Resume
+              </>
+            ) : (
+              <>
+                <Play className="w-6 h-6 mr-3" />
+                Start
+              </>
+            )}
           </Button>
         </div>
       </div>
