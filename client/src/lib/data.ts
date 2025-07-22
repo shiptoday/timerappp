@@ -238,23 +238,34 @@ const defaultWorkoutSessions: Record<string, WorkoutSession> = {
   }
 };
 
-export const workoutSessions: Record<string, WorkoutSession> = new Proxy(defaultWorkoutSessions, {
+export const getWorkoutSession = (id: string): WorkoutSession | undefined => {
+  // First check custom workouts
+  const customWorkouts = workoutStorage.getCustomWorkouts();
+  if (customWorkouts[id]) {
+    return customWorkouts[id];
+  }
+  // Then check default workouts
+  return defaultWorkoutSessions[id];
+};
+
+export const workoutSessions: Record<string, WorkoutSession> = new Proxy({}, {
   get(target, prop) {
     if (typeof prop === 'string') {
-      // First check custom workouts
-      const customWorkouts = workoutStorage.getCustomWorkouts();
-      if (customWorkouts[prop]) {
-        return customWorkouts[prop];
-      }
-      // Then check default workouts
-      return target[prop];
+      return getWorkoutSession(prop);
     }
-    return target[prop];
+    return undefined;
   },
   
   ownKeys(target) {
     const customWorkouts = workoutStorage.getCustomWorkouts();
-    return [...Object.keys(target), ...Object.keys(customWorkouts)];
+    return [...Object.keys(defaultWorkoutSessions), ...Object.keys(customWorkouts)];
+  },
+
+  has(target, prop) {
+    if (typeof prop === 'string') {
+      return getWorkoutSession(prop) !== undefined;
+    }
+    return false;
   }
 });
 

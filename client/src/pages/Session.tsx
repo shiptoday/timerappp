@@ -3,7 +3,7 @@ import { useParams, useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Timer } from '../components/Timer';
-import { workoutSessions } from '../lib/data';
+import { getWorkoutSession } from '../lib/data';
 import { workoutStorage } from '../lib/storage';
 import { audioManager } from '../lib/audio';
 import { SessionStep, LogEntry } from '../types';
@@ -13,8 +13,8 @@ export default function Session() {
   const params = useParams<{ type: string }>();
   const [, navigate] = useLocation();
   
-  const sessionType = params.type as 'mobility' | 'hangboard';
-  const session = workoutSessions[sessionType];
+  const sessionType = params.type as string;
+  const session = getWorkoutSession(sessionType);
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
@@ -55,6 +55,8 @@ export default function Session() {
   };
 
   const nextStep = () => {
+    if (!session) return;
+    
     if (currentStepIndex < session.steps.length - 1) {
       setCurrentStepIndex(prev => prev + 1);
     } else {
@@ -84,7 +86,7 @@ export default function Session() {
     // Save workout log
     const logEntry: Omit<LogEntry, 'id'> = {
       date: new Date().toISOString().split('T')[0],
-      sessionType,
+      sessionType: sessionType as any,
       completedExercises: completedSteps,
       totalTime: Math.floor(totalElapsedTime / 1000),
       completedAt: new Date().toISOString()
@@ -101,6 +103,8 @@ export default function Session() {
   };
 
   const getNextStep = () => {
+    if (!session) return null;
+    
     if (currentStepIndex < session.steps.length - 1) {
       return session.steps[currentStepIndex + 1];
     }
@@ -108,7 +112,7 @@ export default function Session() {
   };
 
   const getSessionColor = () => {
-    return sessionType === 'mobility' ? '#10B981' : '#F59E0B';
+    return '#000000';
   };
 
   if (!session) {
@@ -118,78 +122,48 @@ export default function Session() {
   if (isSessionComplete) {
     return (
       <div className="max-w-md mx-auto bg-white min-h-screen">
-        <header className={`bg-gradient-to-r ${
-          sessionType === 'mobility' ? 'from-secondary to-emerald-600' : 'from-accent to-amber-600'
-        } text-white px-6 py-12 text-center`}>
-          <div className="animate-bounce mb-4">
-            <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto">
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+        <header className="bg-black text-white px-6 py-16 text-center">
+          <div className="mb-8">
+            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
             </div>
           </div>
-          <h1 className="text-2xl font-bold mb-2">Great Job!</h1>
-          <p className={`${sessionType === 'mobility' ? 'text-emerald-100' : 'text-amber-100'}`}>
-            You've completed your {sessionType} session
+          <h1 className="text-3xl font-light mb-4">Complete</h1>
+          <p className="text-gray-300 capitalize">
+            {sessionType} session finished
           </p>
         </header>
 
-        <main className="p-6">
-          <div className="space-y-4 mb-8">
-            <Card className="bg-gray-50">
-              <CardContent className="p-4 flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Duration</p>
-                    <p className="font-semibold text-neutral">{formatTime(Math.floor(totalElapsedTime / 1000))}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+        <main className="p-6 text-center">
+          <div className="space-y-8 mb-12">
+            <div>
+              <p className="text-xs text-gray-400 mb-2 uppercase tracking-wide">Duration</p>
+              <p className="text-2xl font-light text-gray-800">{formatTime(Math.floor(totalElapsedTime / 1000))}</p>
+            </div>
 
-            <Card className="bg-gray-50">
-              <CardContent className="p-4 flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    sessionType === 'mobility' ? 'bg-secondary' : 'bg-accent'
-                  }`}>
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Exercises</p>
-                    <p className="font-semibold text-neutral">
-                      {completedSteps.length}/{session.steps.length} completed
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <div>
+              <p className="text-xs text-gray-400 mb-2 uppercase tracking-wide">Exercises</p>
+              <p className="text-2xl font-light text-gray-800">
+                {completedSteps.length}/{session.steps.length}
+              </p>
+            </div>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             <Button 
               onClick={() => navigate('/')}
-              className="w-full bg-primary hover:bg-blue-600 text-white rounded-xl py-4 font-semibold transition-colors"
+              className="w-full bg-black hover:bg-gray-800 text-white rounded-none py-4 font-light transition-colors"
             >
-              <Home className="w-5 h-5 mr-2" />
-              Back to Home
+              Home
             </Button>
             
             <Button 
               onClick={() => navigate(`/session/${sessionType}`)}
-              className={`w-full ${
-                sessionType === 'mobility' ? 'bg-secondary hover:bg-emerald-600' : 'bg-accent hover:bg-amber-600'
-              } text-white rounded-xl py-4 font-semibold transition-colors`}
+              className="w-full bg-white hover:bg-gray-50 text-black border border-gray-200 rounded-none py-4 font-light transition-colors"
             >
-              <RotateCcw className="w-5 h-5 mr-2" />
-              Start Another Session
+              Start Again
             </Button>
           </div>
         </main>
@@ -200,9 +174,7 @@ export default function Session() {
   return (
     <div className="max-w-md mx-auto bg-white min-h-screen">
       {/* Session Header */}
-      <header className={`bg-gradient-to-r ${
-        sessionType === 'mobility' ? 'from-secondary to-emerald-600' : 'from-accent to-amber-600'
-      } text-white px-6 py-6`}>
+      <header className="bg-black text-white px-6 py-6">
         <div className="flex items-center justify-between mb-4">
           <Button
             variant="ghost"
@@ -228,30 +200,26 @@ export default function Session() {
         </div>
         
         {/* Progress Bar */}
-        <div className={`w-full ${
-          sessionType === 'mobility' ? 'bg-emerald-400' : 'bg-amber-400'
-        } rounded-full h-2 mb-2`}>
+        <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
           <div 
             className="bg-white h-2 rounded-full transition-all duration-500"
             style={{ width: `${(currentStepIndex / session.steps.length) * 100}%` }}
           />
         </div>
-        <p className={`${
-          sessionType === 'mobility' ? 'text-emerald-100' : 'text-amber-100'
-        } text-sm text-center`}>
-          {currentStepIndex + 1} of {session.steps.length} exercises
+        <p className="text-gray-300 text-sm text-center">
+          {currentStepIndex + 1} of {session.steps.length}
         </p>
       </header>
 
       {/* Current Exercise Display */}
       <main className="p-6 text-center">
         {/* Exercise Name */}
-        <h2 className="text-2xl font-bold text-neutral mb-2">
+        <h2 className="text-3xl font-light text-gray-900 mb-6">
           {currentStep?.name}
         </h2>
         
         {/* Exercise Instructions */}
-        <p className="text-gray-600 mb-8 px-4">
+        <p className="text-gray-600 mb-12 px-4 leading-relaxed">
           {currentStep?.instructions}
         </p>
 
@@ -269,44 +237,34 @@ export default function Session() {
 
         {/* Next Exercise Preview */}
         {getNextStep() && (
-          <Card className="bg-gray-50 mb-8">
-            <CardContent className="p-4">
-              <p className="text-sm text-gray-500 mb-2">Next up:</p>
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                  <Play className="w-5 h-5 text-gray-500" />
-                </div>
-                <div className="text-left">
-                  <p className="font-medium text-neutral">{getNextStep()?.name}</p>
-                  <p className="text-sm text-gray-500">{formatTime(getNextStep()?.duration || 0)}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="mb-12">
+            <p className="text-xs text-gray-400 mb-2 uppercase tracking-wide">Next</p>
+            <p className="text-lg text-gray-700 font-light">{getNextStep()?.name}</p>
+          </div>
         )}
       </main>
 
       {/* Session Controls */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-6">
         <div className="max-w-md mx-auto">
-          <div className="flex items-center justify-between space-x-4">
+          <div className="flex items-center space-x-4 mb-4">
             
             {/* Previous Button */}
             <Button 
               variant="outline"
               onClick={previousStep}
               disabled={currentStepIndex === 0}
-              className="flex-1 rounded-xl py-3 px-4 flex items-center justify-center"
+              className="flex-1 rounded-none py-4 border-gray-200 text-gray-600 font-light"
               aria-label="Previous exercise"
             >
               <SkipBack className="w-4 h-4 mr-2" />
-              Back
+              Previous
             </Button>
 
             {/* Play/Pause Button */}
             <Button 
               onClick={toggleTimer}
-              className="flex-1 bg-primary hover:bg-blue-600 text-white rounded-xl py-3 px-4 flex items-center justify-center transition-colors"
+              className="flex-2 bg-black hover:bg-gray-800 text-white rounded-none py-4 font-light transition-colors"
               aria-label={isPaused ? "Resume timer" : isRunning ? "Pause timer" : "Start timer"}
             >
               {isPaused ? (
@@ -324,7 +282,7 @@ export default function Session() {
               variant="outline"
               onClick={nextStep}
               disabled={currentStepIndex === session.steps.length - 1}
-              className="flex-1 rounded-xl py-3 px-4 flex items-center justify-center"
+              className="flex-1 rounded-none py-4 border-gray-200 text-gray-600 font-light"
               aria-label="Next exercise"
             >
               Next
@@ -336,11 +294,10 @@ export default function Session() {
           <Button 
             variant="ghost"
             onClick={finishSession}
-            className="w-full mt-3 text-error hover:text-red-600 text-sm font-medium py-2"
+            className="w-full text-gray-400 hover:text-gray-600 text-sm font-light py-2"
             aria-label="Finish session early"
           >
-            <Square className="w-4 h-4 mr-1" />
-            Finish Session
+            End Session
           </Button>
         </div>
       </div>

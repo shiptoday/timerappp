@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { workoutSessions } from '../lib/data';
+import { getWorkoutSession } from '../lib/data';
 import { workoutStorage } from '../lib/storage';
 import { SessionStep, WorkoutSession } from '../types';
 import { ArrowLeft, Plus, Trash2, GripVertical } from 'lucide-react';
@@ -23,12 +23,14 @@ export default function EditWorkout() {
   const [steps, setSteps] = useState<SessionStep[]>([]);
 
   useEffect(() => {
-    if (!isNewWorkout && workoutSessions[workoutType]) {
-      const session = workoutSessions[workoutType];
-      setWorkoutName(workoutType.charAt(0).toUpperCase() + workoutType.slice(1));
-      setWorkoutColor(workoutType === 'mobility' ? '#10B981' : '#F59E0B');
-      setSteps([...session.steps]);
-    } else if (isNewWorkout) {
+    if (!isNewWorkout) {
+      const session = getWorkoutSession(workoutType);
+      if (session) {
+        setWorkoutName(workoutType.charAt(0).toUpperCase() + workoutType.slice(1));
+        setWorkoutColor(workoutType === 'mobility' ? '#10B981' : '#F59E0B');
+        setSteps([...session.steps]);
+      }
+    } else {
       setWorkoutName('');
       setWorkoutColor('#10B981');
       setSteps([]);
@@ -103,9 +105,9 @@ export default function EditWorkout() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-gray-50 min-h-screen">
+    <div className="max-w-md mx-auto bg-white min-h-screen">
       {/* Header */}
-      <header className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-6">
+      <header className="bg-black text-white px-6 py-6">
         <div className="flex items-center justify-between mb-4">
           <Button
             variant="ghost"
@@ -116,14 +118,14 @@ export default function EditWorkout() {
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-lg font-semibold">
+          <h1 className="text-xl font-light">
             {isNewWorkout ? 'New Workout' : `Edit ${workoutType.charAt(0).toUpperCase() + workoutType.slice(1)}`}
           </h1>
           <Button
             variant="ghost"
             size="sm"
             onClick={saveWorkout}
-            className="text-white hover:text-opacity-80 p-2 font-semibold"
+            className="text-white hover:text-opacity-80 p-2 font-light"
             aria-label="Save workout"
           >
             Save
