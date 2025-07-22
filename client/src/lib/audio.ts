@@ -54,6 +54,18 @@ export class AudioManager {
     this.playSound(this.pauseSound);
   }
 
+  async playPause(): Promise<void> {
+    // This is used for pause button
+    await this.initialize();
+    this.playSound(this.pauseSound);
+  }
+
+  async playNext(): Promise<void> {
+    // This is used for resume/next
+    await this.initialize();
+    this.playSound(this.nextSound);
+  }
+
   private playSound(audio: HTMLAudioElement | null) {
     if (!audio) return;
 
