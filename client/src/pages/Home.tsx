@@ -11,14 +11,8 @@ export default function Home() {
 
   return (
     <div className="max-w-md mx-auto bg-white dark:bg-gray-900 min-h-screen safe-area-top safe-area-bottom">
-      {/* Header */}
-      <div className="p-6 pb-4">
-        <h1 className="text-3xl font-light text-gray-900 dark:text-gray-100 mb-2">FlowTrainer</h1>
-        <p className="text-gray-500 dark:text-gray-400 text-sm">Choose your workout routine</p>
-      </div>
-
       {/* Workout Selection */}
-      <section className="px-6 space-y-6">
+      <section className="px-6 pt-6 space-y-6">
         
         {/* Mobility Button with Edit */}
         <div className="relative">
