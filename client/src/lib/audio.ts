@@ -1,42 +1,71 @@
+// Import sound files
+import nextSoundUrl from '@assets/next_1753213600709.mp3';
+import finishSoundUrl from '@assets/finish_1753213600708.m4a';
+import pauseSoundUrl from '@assets/pause_1753213600709.mp3';
+
 export class AudioManager {
-  private audioContext: AudioContext | null = null;
+  private nextSound: HTMLAudioElement | null = null;
+  private finishSound: HTMLAudioElement | null = null;
+  private pauseSound: HTMLAudioElement | null = null;
   private isInitialized = false;
 
   async initialize(): Promise<void> {
     if (this.isInitialized) return;
 
     try {
-      this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      // Initialize audio elements
+      this.nextSound = new Audio(nextSoundUrl);
+      this.finishSound = new Audio(finishSoundUrl);
+      this.pauseSound = new Audio(pauseSoundUrl);
+
+      // Set volume levels
+      this.nextSound.volume = 0.6;
+      this.finishSound.volume = 0.7;
+      this.pauseSound.volume = 0.5;
+
+      // Preload audio files
+      this.nextSound.preload = 'auto';
+      this.finishSound.preload = 'auto';
+      this.pauseSound.preload = 'auto';
+
       this.isInitialized = true;
     } catch (error) {
-      console.warn('Audio context not supported:', error);
+      console.warn('Error initializing sounds:', error);
     }
   }
 
-  async playBeep(frequency: number = 800, duration: number = 200): Promise<void> {
-    if (!this.audioContext) {
-      await this.initialize();
-    }
+  async playTimerComplete(): Promise<void> {
+    // This is used for exercise transitions
+    await this.initialize();
+    this.playSound(this.nextSound);
+    this.vibrate([200, 100, 200]);
+  }
 
-    if (!this.audioContext) return;
+  async playSessionComplete(): Promise<void> {
+    // This is used when the entire session is finished
+    await this.initialize();
+    this.playSound(this.finishSound);
+    this.vibrate([300, 100, 300, 100, 300]);
+  }
+
+  async playButtonPress(): Promise<void> {
+    // This is used for button interactions (stop/pause)
+    await this.initialize();
+    this.playSound(this.pauseSound);
+  }
+
+  private playSound(audio: HTMLAudioElement | null) {
+    if (!audio) return;
 
     try {
-      const oscillator = this.audioContext.createOscillator();
-      const gainNode = this.audioContext.createGain();
-
-      oscillator.connect(gainNode);
-      gainNode.connect(this.audioContext.destination);
-
-      oscillator.frequency.value = frequency;
-      oscillator.type = 'sine';
-
-      gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + duration / 1000);
-
-      oscillator.start(this.audioContext.currentTime);
-      oscillator.stop(this.audioContext.currentTime + duration / 1000);
+      // Reset audio to beginning
+      audio.currentTime = 0;
+      // Play the sound
+      audio.play().catch(error => {
+        console.log('Error playing sound:', error);
+      });
     } catch (error) {
-      console.warn('Error playing beep:', error);
+      console.log('Error playing sound:', error);
     }
   }
 
@@ -44,18 +73,6 @@ export class AudioManager {
     if (navigator.vibrate) {
       navigator.vibrate(pattern);
     }
-  }
-
-  async playTimerComplete(): Promise<void> {
-    await this.playBeep(1000, 300);
-    this.vibrate([200, 100, 200]);
-  }
-
-  async playSessionComplete(): Promise<void> {
-    await this.playBeep(800, 200);
-    setTimeout(() => this.playBeep(1000, 200), 300);
-    setTimeout(() => this.playBeep(1200, 300), 600);
-    this.vibrate([300, 100, 300, 100, 300]);
   }
 }
 

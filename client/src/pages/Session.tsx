@@ -284,7 +284,10 @@ export default function Session() {
             {/* Small End Session Button */}
             {(isRunning || isPaused) && (
               <Button 
-                onClick={() => finishSession(true)}
+                onClick={() => {
+                  audioManager.playButtonPress();
+                  finishSession(true);
+                }}
                 variant="outline"
                 className="w-12 h-12 rounded-lg border-2 border-red-200 dark:border-red-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 p-0"
                 aria-label="End session"
