@@ -1,15 +1,15 @@
-// Exercise images mapping - using local backup images
-import bandedShoulderDislocatesImg from '@assets/banded_shoulder_dislocates_1753204130270.jpg';
-import adhoMukhaImg from '@assets/adho_mukha_svanasana_dog_1753204130270.jpg';
+// Exercise images mapping - using updated preferred images
+import bandedShoulderDislocatesImg from '@assets/shoulders_1753206790643.jpg';
+import adhoMukhaImg from '@assets/dog_1753206790642.jpeg';
 import catCowImg from '@assets/cat_cow_1753204130270.jpg';
-import wristPulsesImg from '@assets/wrist_pulses_front_back_on_floor_1753204130270.jpg';
-import quadrupedHipCarsImg from '@assets/quadruped_hip_cars_1753204130269.jpg';
-import hipThrustImg from '@assets/hip_thrust_arch_1753204130270.jpg';
+import wristPulsesImg from '@assets/wirst_1753206790643.jpg';
+import quadrupedHipCarsImg from '@assets/cars_1753206790642.jpg';
+import hipThrustImg from '@assets/hips_1753206790643.webp';
 import upavishthaImg from '@assets/upavistha_konasana_forward_seated_fold_open_legs_1753204130270.png';
 import halasanaImg from '@assets/halasana_knees_to_floor_1753204130270.png';
 import garlandSquatImg from '@assets/garland_squat_1753204130270.jpg';
-import pigeonFrogImg from '@assets/pigeon_pose_frog_1753204130270.jpg';
-import activeBarHangImg from '@assets/active_bar_hang_1753204130270.jpg';
+import pigeonFrogImg from '@assets/pigeon_1753206790643.webp';
+import activeBarHangImg from '@assets/bar_1753206790642.webp';
 
 export const exerciseImages: Record<string, string> = {
   // Mobility exercises
