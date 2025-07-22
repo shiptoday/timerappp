@@ -2,7 +2,7 @@
 
 ## Overview
 
-FlowTrainer is a minimal, mobile-first web application designed for fitness enthusiasts focusing on mobility training and hangboard workouts. The app provides structured workout sessions with timers, audio feedback, and local workout logging. It's built as a single-page application with offline capabilities and no backend dependencies.
+FlowTrainer is a minimal, mobile-first web application designed for fitness enthusiasts focusing on mobility training and hangboard workouts. The app provides structured workout sessions with timers, audio feedback, and local workout logging. It's built as a Progressive Web App (PWA) with comprehensive offline capabilities, service worker caching, and no backend dependencies for core functionality.
 
 ## User Preferences
 
@@ -40,6 +40,14 @@ Preferred communication style: Simple, everyday language.
 - **Local Storage**: All workout data persisted locally using localStorage
 - **Workout Logging**: Automatic logging of completed sessions with date, type, exercises, and duration
 - **Statistics**: Weekly workout volume tracking and visualization
+- **Offline Storage**: Comprehensive caching system for workouts, session progress, and app data
+
+### Offline Capabilities (PWA)
+- **Service Worker**: Custom service worker with intelligent caching strategies
+- **Progressive Enhancement**: Graceful degradation when offline with fallback workouts
+- **Cache Management**: Automatic cleanup of expired cached data
+- **Offline Indicators**: Visual feedback for connection status
+- **Background Sync**: Stale-while-revalidate strategy for optimal performance
 
 ## Data Flow
 
@@ -119,3 +127,4 @@ Preferred communication style: Simple, everyday language.
 - **January 22, 2025**: Fixed timer flow issues - Resolved timer synchronization problems between exercises, fixed pause functionality to preserve timer position instead of resetting, ensured exercises start at correct durations, made exercise images larger (48px height)
 - **January 22, 2025**: Updated hangboard workout - Modified to 19 exercises with specific naming (Half-Crimp Hang #1-3, 3-Finger Open Hang #1-3, Pocket Hang #1-3), reduced transition time from 10s to 3s, added workout description with load specifications (20mm edge @ 50% BW)
 - **January 22, 2025**: Added hangboard grip images - Added 5 grip demonstration images (half-crimp, 3-finger open, 3 pocket variations) that display only during hangboard workouts, fixed unpause audio to use button press sound instead of transition sound
+- **January 22, 2025**: Implemented comprehensive offline functionality - Added service worker with intelligent caching strategies, PWA manifest for app installation, offline storage utilities for workout data, offline status indicators, and fallback workouts for offline use. App now works completely offline after initial load.

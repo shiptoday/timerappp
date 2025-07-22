@@ -289,7 +289,7 @@ export default function Session() {
           <div className="mb-6 h-32 flex items-center justify-center flex-shrink-0">
             {getHangboardImage(currentStep.name) ? (
               <img 
-                src={getHangboardImage(currentStep.name)} 
+                src={getHangboardImage(currentStep.name) || undefined} 
                 alt={currentStep.name}
                 className="max-h-full max-w-full object-contain"
                 onError={(e) => {

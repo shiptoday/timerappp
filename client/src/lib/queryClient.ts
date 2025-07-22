@@ -1,4 +1,5 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
+import { offlineStorage } from "./offlineStorage";
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
@@ -24,21 +25,48 @@ export async function apiRequest(
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";
+
+// Offline-aware query function
 export const getQueryFn: <T>(options: {
   on401: UnauthorizedBehavior;
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    const res = await fetch(queryKey.join("/") as string, {
-      credentials: "include",
-    });
+    const url = queryKey.join("/") as string;
+    
+    try {
+      const res = await fetch(url, {
+        credentials: "include",
+      });
 
-    if (unauthorizedBehavior === "returnNull" && res.status === 401) {
-      return null;
+      if (unauthorizedBehavior === "returnNull" && res.status === 401) {
+        return null;
+      }
+
+      await throwIfResNotOk(res);
+      const data = await res.json();
+      
+      // Cache successful API responses for offline use
+      if (res.ok && url.includes('/api/')) {
+        const cacheKey = url.replace('/api/', '');
+        offlineStorage.cacheAppData(cacheKey, data);
+      }
+      
+      return data;
+    } catch (error) {
+      // If network fails, try to get cached data for API requests
+      if (url.includes('/api/')) {
+        const cacheKey = url.replace('/api/', '');
+        const cachedData = offlineStorage.getCachedAppData(cacheKey);
+        
+        if (cachedData) {
+          console.log(`Serving cached data for ${url}`);
+          return cachedData;
+        }
+      }
+      
+      throw error;
     }
-
-    await throwIfResNotOk(res);
-    return await res.json();
   };
 
 export const queryClient = new QueryClient({
@@ -47,11 +75,21 @@ export const queryClient = new QueryClient({
       queryFn: getQueryFn({ on401: "throw" }),
       refetchInterval: false,
       refetchOnWindowFocus: false,
-      staleTime: Infinity,
-      retry: false,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 24 * 60 * 60 * 1000, // 24 hours (gcTime replaces cacheTime in v5)
+      retry: (failureCount, error) => {
+        // Don't retry if offline - rely on cached data instead
+        if (!navigator.onLine) return false;
+        return failureCount < 2;
+      },
+      retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
     },
     mutations: {
-      retry: false,
+      retry: (failureCount, error) => {
+        // Don't retry mutations if offline
+        if (!navigator.onLine) return false;
+        return failureCount < 1;
+      },
     },
   },
 });
