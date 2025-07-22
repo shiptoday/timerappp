@@ -18,7 +18,7 @@ export default function Home() {
         <div className="relative">
           <Link href="/session/mobility">
             <Button 
-              className="w-full aspect-square bg-blue-500 hover:bg-blue-600 text-white rounded-none text-2xl font-light transition-all duration-200 h-32"
+              className="w-full aspect-square bg-blue-500 hover:bg-blue-600 text-white rounded-2xl text-2xl font-light transition-all duration-200 h-40"
               aria-label="Start Mobility workout"
             >
               Mobility
@@ -40,7 +40,7 @@ export default function Home() {
         <div className="relative">
           <Link href="/session/hangboard">
             <Button 
-              className="w-full aspect-square bg-blue-500 hover:bg-blue-600 text-white rounded-none text-2xl font-light transition-all duration-200 h-32"
+              className="w-full aspect-square bg-blue-500 hover:bg-blue-600 text-white rounded-2xl text-2xl font-light transition-all duration-200 h-40"
               aria-label="Start Hangboard workout"
             >
               Hangboard
@@ -64,7 +64,7 @@ export default function Home() {
         <div className="max-w-md mx-auto">
           <Link href="/edit/new">
             <Button 
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-none py-3 font-light transition-all duration-200"
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-2xl py-4 font-light transition-all duration-200"
               aria-label="Create new workout"
             >
               <Plus className="w-5 h-5 mr-2" />
