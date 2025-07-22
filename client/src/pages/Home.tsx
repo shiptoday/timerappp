@@ -11,12 +11,6 @@ export default function Home() {
 
   return (
     <div className="max-w-md mx-auto bg-white min-h-screen">
-      {/* Header */}
-      <header className="bg-white text-center px-6 py-12">
-        <h1 className="text-4xl font-light text-gray-900 mb-2">FlowTrainer</h1>
-        <p className="text-gray-500 text-sm">Movement training</p>
-      </header>
-
       {/* Workout Selection */}
       <section className="px-6 space-y-6">
         
