@@ -214,17 +214,12 @@ export default function Session() {
       {/* Current Exercise Display */}
       <main className="p-6 text-center relative min-h-[calc(100vh-200px)]">
         {/* Exercise Name */}
-        <h2 className="text-3xl font-light text-gray-900 mb-6">
+        <h2 className="text-3xl font-light text-gray-900 mb-12">
           {currentStep?.name}
         </h2>
-        
-        {/* Exercise Instructions */}
-        <p className="text-gray-600 mb-8 px-4 leading-relaxed">
-          {currentStep?.instructions}
-        </p>
 
         {/* Space reserved for exercise position image */}
-        <div className="mb-8 h-32 flex items-center justify-center">
+        <div className="mb-12 h-40 flex items-center justify-center">
           <div className="text-gray-300 text-xs">Exercise position image</div>
         </div>
 

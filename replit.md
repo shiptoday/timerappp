@@ -100,3 +100,4 @@ Preferred communication style: Simple, everyday language.
 - **January 22, 2025**: Fixed workout persistence system to ensure custom workouts are properly saved and loaded
 - **January 22, 2025**: Updated styling to clean minimalistic design with no rounded corners and light typography
 - **January 22, 2025**: Moved "Next exercise" preview to small bottom-right corner to be less distracting, added space for exercise position images
+- **January 22, 2025**: Removed exercise instruction text completely for ultra-minimal interface - only exercise name and timer remain
