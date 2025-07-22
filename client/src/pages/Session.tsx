@@ -7,6 +7,11 @@ import { getWorkoutSession } from '../lib/data';
 import { getExerciseImage } from '../lib/exerciseImages';
 import { workoutStorage } from '../lib/storage';
 import { audioManager } from '../lib/audio';
+import halfCrimpImg from '@assets/half crimp_1753216683487.png';
+import openHandImg from '@assets/3-finger open hand_1753216683487.png';
+import pocket1Img from '@assets/pocket1_1753216683488.png';
+import pocket2Img from '@assets/pocket2_1753216683488.png';
+import pocket3Img from '@assets/pocket3_1753216683488.png';
 import { SessionStep, LogEntry } from '../types';
 import { Play, Home, RotateCcw } from 'lucide-react';
 
@@ -172,6 +177,25 @@ export default function Session() {
     return '#000000';
   };
 
+  const getHangboardImage = (exerciseName: string): string | null => {
+    if (exerciseName.includes('Half‑Crimp')) {
+      return halfCrimpImg;
+    }
+    if (exerciseName.includes('3‑Finger Open')) {
+      return openHandImg;
+    }
+    if (exerciseName.includes('Pocket Hang #1')) {
+      return pocket1Img;
+    }
+    if (exerciseName.includes('Pocket Hang #2')) {
+      return pocket2Img;
+    }
+    if (exerciseName.includes('Pocket Hang #3')) {
+      return pocket3Img;
+    }
+    return null;
+  };
+
   const addExtraTime = () => {
     const seconds = sessionType === 'hangboard' ? 10 : 15;
     if ((window as any).timerAddTime) {
@@ -260,7 +284,21 @@ export default function Session() {
           )}
         </h2>
 
-
+        {/* Hangboard Grip Image */}
+        {sessionType === 'hangboard' && currentStep && !isTransitionPhase && (
+          <div className="mb-6 h-32 flex items-center justify-center flex-shrink-0">
+            {getHangboardImage(currentStep.name) ? (
+              <img 
+                src={getHangboardImage(currentStep.name)} 
+                alt={currentStep.name}
+                className="max-h-full max-w-full object-contain"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            ) : null}
+          </div>
+        )}
 
         {/* Timer Display - Now Much Larger */}
         <div className="flex-1 flex items-center justify-center relative min-h-[320px]">
