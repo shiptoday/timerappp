@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Timer } from '../components/Timer';
 import { getWorkoutSession } from '../lib/data';
+import { getExerciseImage } from '../lib/exerciseImages';
 import { workoutStorage } from '../lib/storage';
 import { audioManager } from '../lib/audio';
 import { SessionStep, LogEntry } from '../types';
@@ -218,9 +219,21 @@ export default function Session() {
           {currentStep?.name}
         </h2>
 
-        {/* Space reserved for exercise position image */}
+        {/* Exercise Position Image */}
         <div className="mb-12 h-40 flex items-center justify-center">
-          <div className="text-gray-300 text-xs">Exercise position image</div>
+          {currentStep && getExerciseImage(currentStep.name) ? (
+            <img 
+              src={getExerciseImage(currentStep.name)} 
+              alt={currentStep.name}
+              className="max-h-full max-w-full object-contain rounded-lg shadow-sm"
+              onError={(e) => {
+                // Hide image if it fails to load
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          ) : (
+            <div className="text-gray-300 text-xs">Exercise position image</div>
+          )}
         </div>
 
         {/* Timer Display */}

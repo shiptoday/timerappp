@@ -101,3 +101,4 @@ Preferred communication style: Simple, everyday language.
 - **January 22, 2025**: Updated styling to clean minimalistic design with no rounded corners and light typography
 - **January 22, 2025**: Moved "Next exercise" preview to small bottom-right corner to be less distracting, added space for exercise position images
 - **January 22, 2025**: Removed exercise instruction text completely for ultra-minimal interface - only exercise name and timer remain
+- **January 22, 2025**: Added exercise position images for all mobility/stretching exercises with fallback handling for failed image loads
