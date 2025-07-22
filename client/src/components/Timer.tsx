@@ -10,6 +10,7 @@ interface TimerProps {
   className?: string;
   color?: string;
   onReset?: boolean;
+  onAddTime?: (seconds: number) => void;
 }
 
 export function Timer({ 
@@ -19,7 +20,8 @@ export function Timer({
   isPaused = false,
   className,
   color = '#10B981',
-  onReset = false
+  onReset = false,
+  onAddTime
 }: TimerProps) {
   const timer = useTimer({ 
     initialTime: duration, 
@@ -47,6 +49,13 @@ export function Timer({
       timer.reset(duration);
     }
   }, [onReset, duration]);
+
+  // Expose addTime function to parent
+  useEffect(() => {
+    if (onAddTime) {
+      (window as any).timerAddTime = (seconds: number) => timer.addTime(seconds);
+    }
+  }, [onAddTime, timer.addTime]);
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);

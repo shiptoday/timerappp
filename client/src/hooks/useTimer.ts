@@ -103,6 +103,13 @@ export function useTimer({ initialTime, onComplete, autoStart = false }: UseTime
     onCompleteRef.current?.();
   }, []);
 
+  const addTime = useCallback((seconds: number) => {
+    setState(prevState => ({
+      ...prevState,
+      currentTime: prevState.currentTime + seconds
+    }));
+  }, []);
+
   return {
     ...state,
     start,
@@ -110,6 +117,7 @@ export function useTimer({ initialTime, onComplete, autoStart = false }: UseTime
     resume,
     reset,
     skip,
+    addTime,
     toggle: state.isPaused ? resume : pause
   };
 }

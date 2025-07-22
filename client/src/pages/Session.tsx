@@ -117,8 +117,9 @@ export default function Session() {
   };
 
   const addFifteenSeconds = () => {
-    // This would need to communicate with the Timer component
-    // For now, just a placeholder function
+    if ((window as any).timerAddTime) {
+      (window as any).timerAddTime(15);
+    }
   };
 
   if (!session) {
@@ -179,8 +180,26 @@ export default function Session() {
 
   return (
     <div className="max-w-md mx-auto bg-white dark:bg-gray-900 min-h-screen safe-area-top safe-area-bottom">
+      {/* Progress Bar */}
+      <div className="px-4 pt-4">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            Exercise {currentStepIndex + 1} of {session?.steps.length}
+          </span>
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            {Math.round(((currentStepIndex + 1) / (session?.steps.length || 1)) * 100)}%
+          </span>
+        </div>
+        <div className="h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-blue-500 dark:bg-blue-400 rounded-full transition-all duration-300"
+            style={{ width: `${((currentStepIndex + 1) / (session?.steps.length || 1)) * 100}%` }}
+          />
+        </div>
+      </div>
+
       {/* Current Exercise Display */}
-      <main className="px-4 py-6 text-center relative min-h-[calc(100vh-180px)] flex flex-col">
+      <main className="px-4 py-6 text-center relative min-h-[calc(100vh-220px)] flex flex-col">
         {/* Exercise Name */}
         <h2 className="text-2xl sm:text-3xl font-light text-gray-900 dark:text-gray-100 mb-6 px-2">
           {currentStep?.name}
@@ -211,6 +230,7 @@ export default function Session() {
             isPaused={isPaused}
             color={getSessionColor()}
             onReset={currentStepIndex !== undefined}
+            onAddTime={addFifteenSeconds}
           />
           {/* +15sec Button - Now positioned better for larger timer */}
           {isRunning && (
@@ -237,32 +257,48 @@ export default function Session() {
       {/* Session Controls */}
       <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 p-4 safe-area-bottom">
         <div className="max-w-md mx-auto">
-          {/* Main Action Button - Enhanced for iPhone */}
-          <Button 
-            onClick={isRunning ? finishSession : toggleTimer}
-            className={`w-full py-4 text-lg font-semibold rounded-xl transition-all duration-200 min-h-[56px] shadow-lg ${
-              isRunning 
-                ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white shadow-red-500/20' 
-                : isPaused
+          {/* Main Action Button - Now Pause/Resume */}
+          <div className="flex items-center gap-2">
+            <Button 
+              onClick={toggleTimer}
+              className={`flex-1 py-4 text-lg font-semibold rounded-xl transition-all duration-200 min-h-[56px] shadow-lg ${
+                isPaused
                 ? 'bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-green-500/20'
+                : isRunning
+                ? 'bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white shadow-orange-500/20'
                 : 'bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-green-500/20'
-            }`}
-            aria-label={isRunning ? "Stop session" : isPaused ? "Resume timer" : "Start timer"}
-          >
-            {isRunning ? (
-              <>Stop Session</>
-            ) : isPaused ? (
-              <>
-                <Play className="w-5 h-5 mr-2" />
-                Resume
-              </>
-            ) : (
-              <>
-                <Play className="w-5 h-5 mr-2" />
-                Start
-              </>
+              }`}
+              aria-label={isPaused ? "Resume timer" : isRunning ? "Pause timer" : "Start timer"}
+            >
+              {isPaused ? (
+                <>
+                  <Play className="w-5 h-5 mr-2" />
+                  Resume
+                </>
+              ) : isRunning ? (
+                <>
+                  Pause
+                </>
+              ) : (
+                <>
+                  <Play className="w-5 h-5 mr-2" />
+                  Start
+                </>
+              )}
+            </Button>
+            
+            {/* Small End Session Button */}
+            {(isRunning || isPaused) && (
+              <Button 
+                onClick={finishSession}
+                variant="outline"
+                className="w-12 h-12 rounded-lg border-2 border-red-200 dark:border-red-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 p-0"
+                aria-label="End session"
+              >
+                ✕
+              </Button>
             )}
-          </Button>
+          </div>
         </div>
       </div>
     </div>
