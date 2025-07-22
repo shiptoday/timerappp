@@ -23,6 +23,7 @@ export default function Session() {
   const [completedSteps, setCompletedSteps] = useState<string[]>([]);
   const [sessionStartTime] = useState(Date.now());
   const [isSessionComplete, setIsSessionComplete] = useState(false);
+  const [isSessionCancelled, setIsSessionCancelled] = useState(false);
   const [totalElapsedTime, setTotalElapsedTime] = useState(0);
 
   const currentStep = session?.steps[currentStepIndex];
@@ -80,21 +81,25 @@ export default function Session() {
     }
   };
 
-  const finishSession = () => {
+  const finishSession = (cancelled = false) => {
     setIsRunning(false);
-    setIsSessionComplete(true);
     
-    // Save workout log
-    const logEntry: Omit<LogEntry, 'id'> = {
-      date: new Date().toISOString().split('T')[0],
-      sessionType: sessionType as any,
-      completedExercises: completedSteps,
-      totalTime: Math.floor(totalElapsedTime / 1000),
-      completedAt: new Date().toISOString()
-    };
+    if (cancelled) {
+      setIsSessionCancelled(true);
+    } else {
+      setIsSessionComplete(true);
+      // Save workout log only if completed
+      const logEntry: Omit<LogEntry, 'id'> = {
+        date: new Date().toISOString().split('T')[0],
+        sessionType: sessionType as any,
+        completedExercises: completedSteps,
+        totalTime: Math.floor(totalElapsedTime / 1000),
+        completedAt: new Date().toISOString()
+      };
 
-    workoutStorage.addLog(logEntry);
-    audioManager.playSessionComplete();
+      workoutStorage.addLog(logEntry);
+      audioManager.playSessionComplete();
+    }
   };
 
   const formatTime = (seconds: number): string => {
@@ -126,54 +131,43 @@ export default function Session() {
     return <div>Loading...</div>;
   }
 
-  if (isSessionComplete) {
+  if (isSessionComplete || isSessionCancelled) {
     return (
-      <div className="max-w-md mx-auto bg-white min-h-screen">
-        <header className="bg-black text-white px-6 py-16 text-center">
-          <div className="mb-8">
-            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-            </div>
-          </div>
-          <h1 className="text-3xl font-light mb-4">Complete</h1>
-          <p className="text-gray-300 capitalize">
-            {sessionType} session finished
-          </p>
-        </header>
+      <div className="max-w-md mx-auto bg-white dark:bg-gray-900 min-h-screen safe-area-top safe-area-bottom flex flex-col items-center justify-center p-6 text-center">
+        {/* Status Icon */}
+        <div className={`w-24 h-24 rounded-full flex items-center justify-center mb-8 ${
+          isSessionComplete 
+            ? 'bg-green-100 dark:bg-green-900/30' 
+            : 'bg-gray-100 dark:bg-gray-800'
+        }`}>
+          {isSessionComplete ? (
+            <svg className="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+            </svg>
+          ) : (
+            <svg className="w-12 h-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          )}
+        </div>
 
-        <main className="p-6 text-center">
-          <div className="space-y-8 mb-12">
-            <div>
-              <p className="text-xs text-gray-400 mb-2 uppercase tracking-wide">Duration</p>
-              <p className="text-2xl font-light text-gray-800">{formatTime(Math.floor(totalElapsedTime / 1000))}</p>
-            </div>
-
-            <div>
-              <p className="text-xs text-gray-400 mb-2 uppercase tracking-wide">Exercises</p>
-              <p className="text-2xl font-light text-gray-800">
-                {completedSteps.length}/{session.steps.length}
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <Button 
-              onClick={() => navigate('/')}
-              className="w-full bg-black hover:bg-gray-800 text-white rounded-none py-4 font-light transition-colors"
-            >
-              Home
-            </Button>
-            
-            <Button 
-              onClick={() => navigate(`/session/${sessionType}`)}
-              className="w-full bg-white hover:bg-gray-50 text-black border border-gray-200 rounded-none py-4 font-light transition-colors"
-            >
-              Start Again
-            </Button>
-          </div>
-        </main>
+        {/* Status Text */}
+        <h2 className="text-3xl font-light text-gray-900 dark:text-gray-100 mb-4">
+          {isSessionComplete ? 'Done' : 'Cancelled'}
+        </h2>
+        
+        {/* Duration */}
+        <p className="text-lg text-gray-600 dark:text-gray-400 mb-12">
+          {formatTime(Math.floor(totalElapsedTime / 1000))}
+        </p>
+        
+        {/* Back to Home Button */}
+        <Button 
+          onClick={() => navigate('/')}
+          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-3xl py-4 text-lg font-medium transition-all duration-200 shadow-lg shadow-blue-500/20 min-h-[56px] active:scale-[0.98] max-w-xs"
+        >
+          Back to Home
+        </Button>
       </div>
     );
   }
@@ -290,7 +284,7 @@ export default function Session() {
             {/* Small End Session Button */}
             {(isRunning || isPaused) && (
               <Button 
-                onClick={finishSession}
+                onClick={() => finishSession(true)}
                 variant="outline"
                 className="w-12 h-12 rounded-lg border-2 border-red-200 dark:border-red-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 p-0"
                 aria-label="End session"
