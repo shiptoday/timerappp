@@ -103,3 +103,4 @@ Preferred communication style: Simple, everyday language.
 - **January 22, 2025**: Removed exercise instruction text completely for ultra-minimal interface - only exercise name and timer remain
 - **January 22, 2025**: Added exercise position images for all mobility/stretching exercises with fallback handling for failed image loads
 - **January 22, 2025**: Fixed image loading using local backup images - all 11 mobility exercise images now display properly using @assets imports
+- **January 22, 2025**: Removed instructions field from workout editor since instructions are no longer displayed in ultra-minimal interface

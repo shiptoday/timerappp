@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
+
 import { getWorkoutSession } from '../lib/data';
 import { workoutStorage } from '../lib/storage';
 import { SessionStep, WorkoutSession } from '../types';
@@ -42,7 +42,7 @@ export default function EditWorkout() {
       id: `step-${Date.now()}`,
       name: '',
       duration: 60,
-      instructions: '',
+      instructions: '', // Keep for compatibility but won't be displayed
       type: 'exercise'
     };
     setSteps([...steps, newStep]);
@@ -251,17 +251,7 @@ export default function EditWorkout() {
                     </div>
                   </div>
 
-                  <div>
-                    <Label htmlFor={`step-instructions-${index}`}>Instructions</Label>
-                    <Textarea
-                      id={`step-instructions-${index}`}
-                      value={step.instructions}
-                      onChange={(e) => updateStep(index, 'instructions', e.target.value)}
-                      placeholder="Enter exercise instructions"
-                      className="mt-1 resize-none"
-                      rows={3}
-                    />
-                  </div>
+
                 </div>
               </CardContent>
             </Card>
