@@ -104,3 +104,5 @@ Preferred communication style: Simple, everyday language.
 - **January 22, 2025**: Added exercise position images for all mobility/stretching exercises with fallback handling for failed image loads
 - **January 22, 2025**: Fixed image loading using local backup images - all 11 mobility exercise images now display properly using @assets imports
 - **January 22, 2025**: Removed instructions field from workout editor since instructions are no longer displayed in ultra-minimal interface
+- **January 22, 2025**: Removed exercise type field from workout editor - simplified to just name, duration, and image selection
+- **January 22, 2025**: Added custom image selection in workout editor - users can choose which exercise image to display for each step

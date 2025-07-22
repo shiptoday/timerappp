@@ -221,9 +221,9 @@ export default function Session() {
 
         {/* Exercise Position Image */}
         <div className="mb-12 h-40 flex items-center justify-center">
-          {currentStep && getExerciseImage(currentStep.name) ? (
+          {currentStep && getExerciseImage(currentStep.name, currentStep.imageKey) ? (
             <img 
-              src={getExerciseImage(currentStep.name)} 
+              src={getExerciseImage(currentStep.name, currentStep.imageKey)} 
               alt={currentStep.name}
               className="max-h-full max-w-full object-contain rounded shadow-sm"
               onError={(e) => {

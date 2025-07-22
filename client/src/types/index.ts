@@ -5,6 +5,7 @@ export interface SessionStep {
   instructions: string;
   type: 'exercise' | 'rest' | 'warmup';
   imageUrl?: string;
+  imageKey?: string; // Key to select image from exerciseImages mapping
 }
 
 export interface LogEntry {

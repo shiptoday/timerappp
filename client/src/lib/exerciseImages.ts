@@ -26,7 +26,11 @@ export const exerciseImages: Record<string, string> = {
   "Active bar hang": activeBarHangImg
 };
 
-export const getExerciseImage = (exerciseName: string): string | undefined => {
+export const getExerciseImage = (exerciseName: string, imageKey?: string): string | undefined => {
+  // Use custom imageKey if provided
+  if (imageKey && imageKey !== 'none' && exerciseImages[imageKey]) {
+    return exerciseImages[imageKey];
+  }
   // Direct match first
   if (exerciseImages[exerciseName]) {
     return exerciseImages[exerciseName];

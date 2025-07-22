@@ -234,18 +234,27 @@ export default function EditWorkout() {
                     </div>
                     
                     <div>
-                      <Label htmlFor={`step-type-${index}`}>Type</Label>
+                      <Label htmlFor={`step-image-${index}`}>Exercise Image</Label>
                       <Select 
-                        value={step.type} 
-                        onValueChange={(value) => updateStep(index, 'type', value)}
+                        value={step.imageKey || 'none'} 
+                        onValueChange={(value) => updateStep(index, 'imageKey', value === 'none' ? undefined : value)}
                       >
                         <SelectTrigger className="mt-1">
-                          <SelectValue />
+                          <SelectValue placeholder="Select image" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="exercise">Exercise</SelectItem>
-                          <SelectItem value="rest">Rest</SelectItem>
-                          <SelectItem value="warmup">Warmup</SelectItem>
+                          <SelectItem value="none">No image</SelectItem>
+                          <SelectItem value="Banded shoulder dislocates">Banded Shoulder Dislocates</SelectItem>
+                          <SelectItem value="Adho mukha svanasana (Downward Dog)">Downward Dog</SelectItem>
+                          <SelectItem value="Cat–Cow">Cat-Cow</SelectItem>
+                          <SelectItem value="Wrist pulses (front/back on floor)">Wrist Pulses</SelectItem>
+                          <SelectItem value="Quadruped Hip CAR's">Hip CARs</SelectItem>
+                          <SelectItem value="Hip thrust + Arch">Hip Thrust + Arch</SelectItem>
+                          <SelectItem value="Upavistha konasana">Wide-Leg Forward Fold</SelectItem>
+                          <SelectItem value="Halasana (Knees to floor)">Plow Pose</SelectItem>
+                          <SelectItem value="Garland squat">Garland Squat</SelectItem>
+                          <SelectItem value="Pigeon pose + Frog">Pigeon + Frog</SelectItem>
+                          <SelectItem value="Active bar hang">Active Bar Hang</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
