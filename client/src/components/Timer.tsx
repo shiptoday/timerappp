@@ -35,13 +35,19 @@ export function Timer({
       timer.start();
     } else if (isPaused) {
       timer.pause();
+    } else if (!isRunning) {
+      timer.pause();
     }
-  }, [isRunning, isPaused]);
+  }, [isRunning, isPaused, timer.start, timer.pause]);
 
   // Reset timer when duration changes
   useEffect(() => {
     timer.reset(duration);
-  }, [duration]);
+    // If should be running after reset, start it
+    if (isRunning && !isPaused) {
+      setTimeout(() => timer.start(), 50);
+    }
+  }, [duration, timer.reset, timer.start, isRunning, isPaused]);
 
   // Handle external reset
   useEffect(() => {

@@ -73,13 +73,10 @@ export default function Session() {
     // Move to next exercise and auto-start
     setIsTransitionPhase(false);
     setCurrentStepIndex(prev => prev + 1);
-    // Small delay to ensure state updates properly
-    setTimeout(() => {
-      setIsRunning(true);
-      setIsPaused(false);
-      // Play transition beep when starting next exercise
-      audioManager.playTimerComplete();
-    }, 100);
+    setIsRunning(true);
+    setIsPaused(false);
+    // Play transition beep when starting next exercise
+    audioManager.playTimerComplete();
   };
 
   const skipToNext = () => {
