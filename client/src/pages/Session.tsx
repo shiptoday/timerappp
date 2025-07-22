@@ -8,7 +8,7 @@ import { getExerciseImage } from '../lib/exerciseImages';
 import { workoutStorage } from '../lib/storage';
 import { audioManager } from '../lib/audio';
 import { SessionStep, LogEntry } from '../types';
-import { ArrowLeft, Play, Pause, SkipBack, SkipForward, Square, Home, RotateCcw } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Home, RotateCcw } from 'lucide-react';
 
 export default function Session() {
   const params = useParams<{ type: string }>();
@@ -174,46 +174,8 @@ export default function Session() {
 
   return (
     <div className="max-w-md mx-auto bg-white min-h-screen">
-      {/* Session Header */}
-      <header className="bg-black text-white px-6 py-6">
-        <div className="flex items-center justify-between mb-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate('/')}
-            className="text-white hover:text-opacity-80 p-2"
-            aria-label="Back to home"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <h1 className="text-lg font-semibold capitalize">
-            {sessionType} Session
-          </h1>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={finishSession}
-            className="text-white hover:text-opacity-80 p-2"
-            aria-label="Finish session"
-          >
-            <Square className="w-5 h-5" />
-          </Button>
-        </div>
-        
-        {/* Progress Bar */}
-        <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
-          <div 
-            className="bg-white h-2 rounded-full transition-all duration-500"
-            style={{ width: `${(currentStepIndex / session.steps.length) * 100}%` }}
-          />
-        </div>
-        <p className="text-gray-300 text-sm text-center">
-          {currentStepIndex + 1} of {session.steps.length}
-        </p>
-      </header>
-
       {/* Current Exercise Display */}
-      <main className="p-6 text-center relative min-h-[calc(100vh-200px)]">
+      <main className="p-6 text-center relative min-h-[calc(100vh-140px)]">
         {/* Exercise Name */}
         <h2 className="text-3xl font-light text-gray-900 mb-12">
           {currentStep?.name}

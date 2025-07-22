@@ -107,3 +107,4 @@ Preferred communication style: Simple, everyday language.
 - **January 22, 2025**: Removed exercise type field from workout editor - simplified to just name, duration, and image selection
 - **January 22, 2025**: Added custom image selection in workout editor - users can choose which exercise image to display for each step
 - **January 22, 2025**: Updated exercise images with user's preferred versions - replaced 6 exercise images (shoulders, downward dog, wrist pulses, hip CARs, hip thrust, pigeon pose, active bar hang) with better quality alternatives
+- **January 22, 2025**: Removed session header completely - eliminated progress bar, session title, and navigation buttons for ultra-minimal focus on exercise content only
