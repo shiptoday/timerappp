@@ -102,3 +102,4 @@ Preferred communication style: Simple, everyday language.
 - **January 22, 2025**: Moved "Next exercise" preview to small bottom-right corner to be less distracting, added space for exercise position images
 - **January 22, 2025**: Removed exercise instruction text completely for ultra-minimal interface - only exercise name and timer remain
 - **January 22, 2025**: Added exercise position images for all mobility/stretching exercises with fallback handling for failed image loads
+- **January 22, 2025**: Fixed image loading using local backup images - all 11 mobility exercise images now display properly using @assets imports

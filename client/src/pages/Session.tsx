@@ -226,9 +226,7 @@ export default function Session() {
               src={getExerciseImage(currentStep.name)} 
               alt={currentStep.name}
               className="max-h-full max-w-full object-contain rounded shadow-sm"
-              onLoad={() => console.log(`Loaded image for: ${currentStep.name}`)}
               onError={(e) => {
-                console.log(`Failed to load image for: ${currentStep.name}`);
                 e.currentTarget.style.display = 'none';
               }}
             />
