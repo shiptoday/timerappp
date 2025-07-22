@@ -252,8 +252,8 @@ export default function Session() {
           )}
         </h2>
 
-        {/* Exercise Position Image */}
-        <div className="mb-6 h-32 flex items-center justify-center flex-shrink-0">
+        {/* Exercise Position Image - Made Bigger */}
+        <div className="mb-6 h-48 flex items-center justify-center flex-shrink-0">
           {currentStep && getExerciseImage(currentStep.name, currentStep.imageKey) ? (
             <img 
               src={getExerciseImage(currentStep.name, currentStep.imageKey)} 

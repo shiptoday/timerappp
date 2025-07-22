@@ -40,14 +40,17 @@ export function Timer({
     }
   }, [isRunning, isPaused, timer.start, timer.pause]);
 
-  // Reset timer when duration changes
+  // Reset timer when duration changes (but preserve current time when just pausing/resuming)
   useEffect(() => {
-    timer.reset(duration);
-    // If should be running after reset, start it
-    if (isRunning && !isPaused) {
-      setTimeout(() => timer.start(), 50);
+    // Only reset if duration actually changed, not just pause/resume
+    if (timer.currentTime > duration || timer.currentTime === 0) {
+      timer.reset(duration);
+      // If should be running after reset, start it
+      if (isRunning && !isPaused) {
+        setTimeout(() => timer.start(), 50);
+      }
     }
-  }, [duration, timer.reset, timer.start, isRunning, isPaused]);
+  }, [duration]);
 
   // Handle external reset
   useEffect(() => {
