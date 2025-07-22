@@ -99,3 +99,4 @@ Preferred communication style: Simple, everyday language.
 - **January 22, 2025**: Redesigned UI to be extremely minimal and simple - removed recent workouts display, simplified color scheme to black/white/gray
 - **January 22, 2025**: Fixed workout persistence system to ensure custom workouts are properly saved and loaded
 - **January 22, 2025**: Updated styling to clean minimalistic design with no rounded corners and light typography
+- **January 22, 2025**: Moved "Next exercise" preview to small bottom-right corner to be less distracting, added space for exercise position images

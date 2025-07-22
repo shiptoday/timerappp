@@ -212,16 +212,21 @@ export default function Session() {
       </header>
 
       {/* Current Exercise Display */}
-      <main className="p-6 text-center">
+      <main className="p-6 text-center relative min-h-[calc(100vh-200px)]">
         {/* Exercise Name */}
         <h2 className="text-3xl font-light text-gray-900 mb-6">
           {currentStep?.name}
         </h2>
         
         {/* Exercise Instructions */}
-        <p className="text-gray-600 mb-12 px-4 leading-relaxed">
+        <p className="text-gray-600 mb-8 px-4 leading-relaxed">
           {currentStep?.instructions}
         </p>
+
+        {/* Space reserved for exercise position image */}
+        <div className="mb-8 h-32 flex items-center justify-center">
+          <div className="text-gray-300 text-xs">Exercise position image</div>
+        </div>
 
         {/* Timer Display */}
         <div className="mb-8">
@@ -235,11 +240,11 @@ export default function Session() {
           />
         </div>
 
-        {/* Next Exercise Preview */}
+        {/* Next Exercise Preview - Bottom Right Corner */}
         {getNextStep() && (
-          <div className="mb-12">
-            <p className="text-xs text-gray-400 mb-2 uppercase tracking-wide">Next</p>
-            <p className="text-lg text-gray-700 font-light">{getNextStep()?.name}</p>
+          <div className="absolute bottom-8 right-6 bg-gray-50 px-3 py-2 rounded shadow-sm border max-w-32">
+            <p className="text-xs text-gray-400 uppercase tracking-wide">Next</p>
+            <p className="text-sm text-gray-600 font-light truncate">{getNextStep()?.name}</p>
           </div>
         )}
       </main>
