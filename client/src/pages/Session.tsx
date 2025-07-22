@@ -58,24 +58,25 @@ export default function Session() {
     }
     
     if (currentStepIndex < (session?.steps.length || 0) - 1) {
-      // Start 10-second transition phase
-      setIsTransitionPhase(true);
-      setIsRunning(false);
+      // Play completion beep and start 10-second transition
       audioManager.playTimerComplete();
-      
-      // After 10 seconds, move to next exercise and auto-start
-      setTimeout(() => {
-        setCurrentStepIndex(currentStepIndex + 1);
-        setIsTransitionPhase(false);
-        setIsRunning(true);
-        setIsPaused(false);
-        // Play transition beep when starting next exercise
-        audioManager.playTimerComplete();
-      }, 10000);
+      setIsTransitionPhase(true);
+      setIsRunning(true); // Keep running for transition timer
+      setIsPaused(false);
     } else {
       // Session complete
       finishSession();
     }
+  };
+
+  const handleTransitionComplete = () => {
+    // Move to next exercise and auto-start
+    setCurrentStepIndex(prev => prev + 1);
+    setIsTransitionPhase(false);
+    setIsRunning(true);
+    setIsPaused(false);
+    // Play transition beep when starting next exercise
+    audioManager.playTimerComplete();
   };
 
   const skipToNext = () => {
@@ -85,6 +86,7 @@ export default function Session() {
     
     if (currentStepIndex < (session?.steps.length || 0) - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
+      setIsTransitionPhase(false); // Skip transition phase
       setIsRunning(true);
       setIsPaused(false);
       audioManager.playTimerComplete();
@@ -270,11 +272,11 @@ export default function Session() {
         <div className="flex-1 flex items-center justify-center relative min-h-[320px]">
           {isTransitionPhase ? (
             <Timer
-              key="transition-timer"
+              key={`transition-${currentStepIndex}`}
               duration={10}
-              isRunning={true}
-              isPaused={false}
-              onComplete={() => {}} // Handled by setTimeout
+              isRunning={isRunning}
+              isPaused={isPaused}
+              onComplete={handleTransitionComplete}
               color="#10B981"
             />
           ) : (
