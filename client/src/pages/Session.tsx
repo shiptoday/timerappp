@@ -284,19 +284,29 @@ export default function Session() {
           )}
         </h2>
 
-        {/* Hangboard Grip Image */}
-        {sessionType === 'hangboard' && currentStep && !isTransitionPhase && (
+        {/* Exercise Image */}
+        {currentStep && !isTransitionPhase && (
           <div className="mb-6 h-32 flex items-center justify-center flex-shrink-0">
-            {getHangboardImage(currentStep.name) ? (
-              <img 
-                src={getHangboardImage(currentStep.name) || undefined} 
-                alt={currentStep.name}
-                className="max-h-full max-w-full object-contain"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
-            ) : null}
+            {(() => {
+              let imageUrl: string | null = null;
+              
+              if (sessionType === 'hangboard') {
+                imageUrl = getHangboardImage(currentStep.name);
+              } else {
+                imageUrl = getExerciseImage(currentStep.name) || null;
+              }
+              
+              return imageUrl ? (
+                <img 
+                  src={imageUrl} 
+                  alt={currentStep.name}
+                  className="max-h-full max-w-full object-contain rounded-lg shadow-md"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              ) : null;
+            })()}
           </div>
         )}
 
