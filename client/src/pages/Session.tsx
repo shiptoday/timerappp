@@ -294,9 +294,6 @@ export default function Session() {
                 imageUrl = getHangboardImage(currentStep.name);
               } else {
                 imageUrl = getExerciseImage(currentStep.name) || null;
-                // Debug logging
-                console.log('Exercise name:', currentStep.name);
-                console.log('Image URL:', imageUrl);
               }
               
               return imageUrl ? (
@@ -305,15 +302,10 @@ export default function Session() {
                   alt={currentStep.name}
                   className="max-h-full max-w-full object-contain rounded-lg shadow-md"
                   onError={(e) => {
-                    console.error('Image failed to load:', e.currentTarget.src);
                     e.currentTarget.style.display = 'none';
                   }}
                 />
-              ) : (
-                <div className="text-gray-400 text-sm">
-                  No image found for: {currentStep.name}
-                </div>
-              );
+              ) : null;
             })()}
           </div>
         )}

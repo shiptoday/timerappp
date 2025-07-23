@@ -54,7 +54,12 @@ Preferred communication style: Simple, everyday language.
   - Mobility: 11 exercises, 15 minutes total
   - Hangboard: 19 exercises with specific grip patterns at 20mm edge @ 50% body weight
 - **Custom Workouts**: User-editable routines with drag-and-drop reordering
-- **Exercise Images**: Asset mapping for visual exercise demonstrations
+- **Exercise Images**: Local asset mapping for all exercise types with fallback handling
+
+## Recent Changes
+
+### January 23, 2025
+- **Fixed Exercise Images Display**: Updated Session component to show exercise images for all workout types (not just hangboard), implementing proper image loading for mobility exercises through getExerciseImage function
 
 ## Data Flow
 
