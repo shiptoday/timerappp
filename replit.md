@@ -1,8 +1,8 @@
-# FlowTrainer - Mobile-First Fitness Timer App
+# TimerAppp - Mobile-First Fitness Timer App
 
 ## Overview
 
-FlowTrainer is a mobile-first web application designed for tracking mobility and hangboard training sessions. The app provides timed workout routines with audio/haptic feedback, offline functionality, and session logging. Built with React 18, TypeScript, and Vite, it emphasizes simplicity and mobile optimization for iPhone displays.
+TimerAppp is a mobile-first web application designed for tracking mobility and hangboard training sessions. The app provides timed workout routines with audio/haptic feedback, offline functionality, and session logging. Built with React 18, TypeScript, and Vite, it emphasizes simplicity and mobile optimization for iPhone displays.
 
 ## User Preferences
 
@@ -59,6 +59,8 @@ Preferred communication style: Simple, everyday language.
 ## Recent Changes
 
 ### January 23, 2025
+- **Updated App Branding**: Changed app name from "FlowTrainer" to "TimerAppp", updated all metadata including HTML title, manifest.json, PWA settings, and Apple web app configurations
+- **New App Icon**: Replaced previous icons with pastel minimal clock icon design, updated favicon, Apple touch icons, and PWA manifest icons
 - **Fixed Exercise Images Display**: Updated Session component to show exercise images for all workout types (not just hangboard), implementing proper image loading for mobility exercises through getExerciseImage function
 
 ## Data Flow
