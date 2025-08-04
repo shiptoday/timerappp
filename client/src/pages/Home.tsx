@@ -10,15 +10,23 @@ export default function Home() {
   const allWorkouts = getAllWorkouts();
 
   return (
-    <div className="max-w-md mx-auto bg-white dark:bg-gray-900 min-h-screen safe-area-top safe-area-bottom">
+    <div className="max-w-md mx-auto bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 min-h-screen iPhone-16-optimized iPhone-pro-optimized relative overflow-hidden" style={{ minHeight: '100dvh' }}>
+      {/* Beautiful background pattern */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-purple-400/20 to-blue-400/20 rounded-full blur-xl"></div>
+        <div className="absolute top-40 right-8 w-24 h-24 bg-gradient-to-br from-pink-400/20 to-orange-400/20 rounded-full blur-lg"></div>
+        <div className="absolute bottom-40 left-6 w-20 h-20 bg-gradient-to-br from-green-400/20 to-cyan-400/20 rounded-full blur-lg"></div>
+      </div>
+
       {/* Workout Selection */}
-      <section className="px-6 pt-6 space-y-6">
+      <section className="relative z-10 px-6 pt-8 space-y-6 ios-scroll">
         
         {/* Mobility Button with Edit */}
-        <div className="relative">
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <Link href="/session/mobility">
             <Button 
-              className="w-full aspect-square bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-3xl text-2xl font-light transition-all duration-200 h-44 shadow-lg shadow-blue-500/20 active:scale-[0.98]"
+              className="relative w-full aspect-square gradient-mobility hover:opacity-90 text-white rounded-3xl text-2xl font-light button-beautiful h-44 shadow-2xl shadow-purple-500/25 border border-white/10"
               aria-label="Start Mobility workout"
             >
               <div className="flex flex-col items-center">
@@ -40,10 +48,11 @@ export default function Home() {
         </div>
 
         {/* Hangboard Button with Edit */}
-        <div className="relative">
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-pink-600/20 to-coral-600/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <Link href="/session/hangboard">
             <Button 
-              className="w-full aspect-square bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-3xl text-2xl font-light transition-all duration-200 h-44 shadow-lg shadow-green-500/20 active:scale-[0.98]"
+              className="relative w-full aspect-square gradient-hangboard hover:opacity-90 text-white rounded-3xl text-2xl font-light button-beautiful h-44 shadow-2xl shadow-pink-500/25 border border-white/10"
               aria-label="Start Hangboard workout"
             >
               <div className="flex flex-col items-center">
@@ -66,11 +75,11 @@ export default function Home() {
       </section>
 
       {/* Create New Workout - Bottom */}
-      <div className="fixed bottom-0 left-0 right-0 p-6 safe-area-bottom bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-t border-gray-100 dark:border-gray-800">
+      <div className="fixed bottom-0 left-0 right-0 p-6 glass-strong border-t border-white/10 dark:border-gray-800/30 relative z-20" style={{ paddingBottom: 'max(24px, env(safe-area-inset-bottom))' }}>
         <div className="max-w-md mx-auto">
           <Link href="/edit/new">
             <Button 
-              className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-2xl py-4 font-medium transition-all duration-200 shadow-lg shadow-orange-500/20 min-h-[56px] active:scale-[0.98]"
+              className="w-full gradient-create hover:opacity-90 text-white rounded-2xl py-4 font-medium button-beautiful shadow-2xl shadow-pink-500/30 min-h-[56px] border border-white/10"
               aria-label="Create new workout"
             >
               <Plus className="w-5 h-5 mr-2" />

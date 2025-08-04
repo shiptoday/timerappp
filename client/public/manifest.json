@@ -4,13 +4,17 @@
   "description": "A mobile-first timer app with mobility and hangboard training routines. Track your workouts and improve your movement quality.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f0f0f0",
-  "theme_color": "#e8b4cb",
+  "display_override": ["standalone", "fullscreen"],
+  "background_color": "#ffffff",
+  "theme_color": "#667eea",
   "orientation": "portrait-primary",
   "scope": "/",
   "categories": ["fitness", "health", "sports", "utilities"],
   "lang": "en",
   "dir": "ltr",
+  "prefer_related_applications": false,
+  "edge_side_panel": {},
+  "screenshots": [],
   "icons": [
     {
       "src": "/icon.png",
@@ -29,6 +33,15 @@
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "120x120",
+      "type": "image/png",
+      "purpose": "any"
     }
-  ]
+  ],
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  }
 }

@@ -174,7 +174,14 @@ export default function Session() {
   };
 
   const getSessionColor = () => {
-    return '#000000';
+    switch (sessionType) {
+      case 'mobility':
+        return '#667eea'; // Gradient start color for mobility
+      case 'hangboard':
+        return '#f093fb'; // Gradient start color for hangboard
+      default:
+        return '#4facfe'; // Timer gradient start color
+    }
   };
 
   const getHangboardImage = (exerciseName: string): string | null => {
@@ -241,7 +248,7 @@ export default function Session() {
         {/* Back to Home Button */}
         <Button 
           onClick={() => navigate('/')}
-          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-3xl py-4 text-lg font-medium transition-all duration-200 shadow-lg shadow-blue-500/20 min-h-[56px] active:scale-[0.98] max-w-xs"
+          className="w-full gradient-timer hover:opacity-90 text-white rounded-3xl py-4 text-lg font-medium button-beautiful shadow-lg shadow-blue-500/20 min-h-[56px] max-w-xs"
         >
           Back to Home
         </Button>
@@ -250,68 +257,91 @@ export default function Session() {
   }
 
   return (
-    <div className="max-w-md mx-auto bg-white dark:bg-gray-900 min-h-screen safe-area-top safe-area-bottom">
-      {/* Progress Bar */}
-      <div className="px-4 pt-4">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs text-gray-500 dark:text-gray-400">
-            Exercise {currentStepIndex + 1} of {session?.steps.length}
-          </span>
-          <span className="text-xs text-gray-500 dark:text-gray-400">
-            {Math.round(((currentStepIndex + 1) / (session?.steps.length || 1)) * 100)}%
-          </span>
-        </div>
-        <div className="h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-blue-500 dark:bg-blue-400 rounded-full transition-all duration-300"
-            style={{ width: `${((currentStepIndex + 1) / (session?.steps.length || 1)) * 100}%` }}
-          />
+    <div className="max-w-md mx-auto bg-gray-50/80 dark:bg-gray-950/80 min-h-screen iPhone-16-optimized iPhone-pro-optimized backdrop-blur-xl" style={{ minHeight: '100dvh' }}>
+      
+      {/* Premium header section */}
+      <div className="px-4 pb-1">
+        
+        {/* Elegant progress indicator */}
+        <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl p-3 shadow-lg border border-white/60 dark:border-gray-700/60">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <div 
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: getSessionColor() }}
+              />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                {sessionType === 'mobility' ? 'Mobility Training' : 'Hangboard Training'}
+              </span>
+            </div>
+            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full">
+              {currentStepIndex + 1} / {session?.steps.length}
+            </span>
+          </div>
+          
+          {/* Modern progress bar */}
+          <div className="h-2 bg-gray-200/60 dark:bg-gray-700/60 rounded-full overflow-hidden">
+            <div 
+              className="h-full rounded-full transition-all duration-500 ease-out"
+              style={{ 
+                width: `${((currentStepIndex + 1) / (session?.steps.length || 1)) * 100}%`,
+                background: `linear-gradient(90deg, ${getSessionColor()} 0%, ${getSessionColor()}80 100%)`
+              }}
+            />
+          </div>
         </div>
       </div>
 
       {/* Current Exercise Display */}
-      <main className="px-4 py-6 text-center relative min-h-[calc(100vh-220px)] flex flex-col">
-        {/* Exercise Name */}
-        <h2 
-          className="text-2xl sm:text-3xl font-light text-gray-900 dark:text-gray-100 mb-6 px-2 cursor-pointer select-none"
-          onClick={handleExerciseNameTap}
-        >
-          {isTransitionPhase ? 'Rest & Prepare' : currentStep?.name}
-          {!isTransitionPhase && (
-            <span className="block text-xs text-gray-400 dark:text-gray-500 mt-2">
-              Double tap to skip →
-            </span>
-          )}
-        </h2>
-
-        {/* Exercise Image */}
-        {currentStep && !isTransitionPhase && (
-          <div className="mb-6 h-32 flex items-center justify-center flex-shrink-0">
-            {(() => {
-              let imageUrl: string | null = null;
-              
-              if (sessionType === 'hangboard') {
-                imageUrl = getHangboardImage(currentStep.name);
-              } else {
-                imageUrl = getExerciseImage(currentStep.name) || null;
-              }
-              
-              return imageUrl ? (
-                <img 
-                  src={imageUrl} 
-                  alt={currentStep.name}
-                  className="max-h-full max-w-full object-contain rounded-lg shadow-md"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
-              ) : null;
-            })()}
+      <main className="px-4 py-2 flex-1 flex flex-col overflow-hidden">
+        
+        {/* Exercise card */}
+        <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl p-4 shadow-lg border border-white/60 dark:border-gray-700/60 mb-3">
+          
+          {/* Exercise name and skip hint */}
+          <div 
+            className="text-center mb-2 cursor-pointer select-none group"
+            onClick={handleExerciseNameTap}
+          >
+            <h2 className="text-xl font-light text-gray-900 dark:text-gray-100 mb-1">
+              {isTransitionPhase ? 'Rest & Prepare' : currentStep?.name}
+            </h2>
+            {!isTransitionPhase && (
+              <p className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors">
+                Double tap to skip →
+              </p>
+            )}
           </div>
-        )}
 
-        {/* Timer Display - Now Much Larger */}
-        <div className="flex-1 flex items-center justify-center relative min-h-[320px]">
+          {/* Exercise Image - Optimized for mobile screen */}
+          {currentStep && !isTransitionPhase && (
+            <div className="mb-3 h-32 flex items-center justify-center">
+              {(() => {
+                let imageUrl: string | null = null;
+                
+                if (sessionType === 'hangboard') {
+                  imageUrl = getHangboardImage(currentStep.name);
+                } else {
+                  imageUrl = getExerciseImage(currentStep.name) || null;
+                }
+                
+                return imageUrl ? (
+                  <img 
+                    src={imageUrl} 
+                    alt={currentStep.name}
+                    className="max-h-full max-w-full object-contain rounded-2xl"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                ) : null;
+              })()}
+            </div>
+          )}
+        </div>
+
+        {/* Timer Display */}
+        <div className="flex-1 flex items-center justify-center">
           <Timer
             key={isTransitionPhase ? `transition-${currentStepIndex}` : `exercise-${currentStepIndex}-${currentStep?.duration}`}
             duration={isTransitionPhase ? 3 : (currentStep?.duration || 0)}
@@ -322,41 +352,50 @@ export default function Session() {
             onReset={false}
             onAddTime={!isTransitionPhase ? addExtraTime : undefined}
           />
-          {/* +15sec Button - Now positioned better for larger timer */}
-          {isRunning && !isTransitionPhase && (
+        </div>
+
+        {/* Add time button */}
+        {isRunning && !isTransitionPhase && (
+          <div className="flex justify-center mb-2">
             <Button
               onClick={addExtraTime}
-              className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-full shadow-lg min-h-[44px] min-w-[44px] font-medium"
+              variant="outline"
+              className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-white/60 dark:border-gray-700/60 hover:bg-white/90 dark:hover:bg-gray-800/90 text-gray-700 dark:text-gray-300 px-4 py-1.5 rounded-full shadow-lg font-medium transition-all text-sm"
               size="sm"
               aria-label={`Add ${sessionType === 'hangboard' ? '10' : '15'} seconds`}
             >
               +{sessionType === 'hangboard' ? '10' : '15'}s
             </Button>
-          )}
-        </div>
+          </div>
+        )}
 
-        {/* Next Exercise Preview - Repositioned for better mobile layout */}
+        {/* Next Exercise Preview - Clear and Easy to Read */}
         {getNextStep() && (
-          <div className="mt-4 bg-gray-50 dark:bg-gray-800 px-4 py-3 rounded-lg shadow-sm border dark:border-gray-700 mx-4">
-            <p className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">Next Exercise</p>
-            <p className="text-sm text-gray-600 dark:text-gray-300 font-medium">{getNextStep()?.name}</p>
+          <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl rounded-2xl p-3 border border-white/60 dark:border-gray-700/60 shadow-lg">
+            <div className="text-center">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Next Exercise</p>
+              <h3 className="text-base font-medium text-gray-900 dark:text-gray-100">
+                {getNextStep()?.name}
+              </h3>
+            </div>
           </div>
         )}
       </main>
 
       {/* Session Controls */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 p-4 safe-area-bottom">
+      <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-t border-white/60 dark:border-gray-700/60 p-4" style={{ paddingBottom: 'max(20px, env(safe-area-inset-bottom))' }}>
         <div className="max-w-md mx-auto">
-          {/* Main Action Button - Now Pause/Resume */}
-          <div className="flex items-center gap-2">
+          
+          <div className="flex items-center gap-3">
+            {/* Main action button */}
             <Button 
               onClick={toggleTimer}
-              className={`flex-1 py-4 text-lg font-semibold rounded-xl transition-all duration-200 min-h-[56px] shadow-lg ${
+              className={`flex-1 py-4 text-lg font-medium rounded-2xl min-h-[56px] shadow-lg transition-all duration-300 border ${
                 isPaused
-                ? 'bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-green-500/20'
+                ? 'bg-emerald-500 hover:bg-emerald-600 text-white border-emerald-400 shadow-emerald-500/25'
                 : isRunning
-                ? 'bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white shadow-orange-500/20'
-                : 'bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-green-500/20'
+                ? 'bg-amber-500 hover:bg-amber-600 text-white border-amber-400 shadow-amber-500/25'
+                : 'bg-emerald-500 hover:bg-emerald-600 text-white border-emerald-400 shadow-emerald-500/25'
               }`}
               aria-label={isPaused ? "Resume timer" : isRunning ? "Pause timer" : "Start timer"}
             >
@@ -377,12 +416,12 @@ export default function Session() {
               )}
             </Button>
             
-            {/* Small End Session Button */}
+            {/* End session button */}
             {(isRunning || isPaused) && (
               <Button 
                 onClick={handleEndSessionClick}
                 variant="outline"
-                className="w-12 h-12 rounded-lg border-2 border-red-200 dark:border-red-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 p-0"
+                className="w-14 h-14 rounded-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-white/60 dark:border-gray-700/60 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 shadow-lg"
                 aria-label="End session"
               >
                 ✕
